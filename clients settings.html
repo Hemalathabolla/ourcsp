@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | IdeaHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #f8f9fa;
+            --accent: #3a0ca3;
+            --light-bg: #f3f5f9;
+            --dark-text: #212529;
+            --light-text: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --danger: #e63946;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafc;
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header & Navigation */
+        .navbar {
+            background-color: white;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-caption {
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d90429;
+        }
+        
+        .btn-success {
+            background-color: #2a9d8f;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #21867a;
+        }
+        
+        /* Page Header */
+        .page-header {
+            padding: 40px 0 20px;
+        }
+        
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        /* Settings Layout */
+        .settings-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            padding: 30px 0 60px;
+        }
+        
+        /* Settings Sidebar */
+        .settings-sidebar {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 0;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .settings-menu {
+            list-style: none;
+        }
+        
+        .settings-menu-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .settings-menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .settings-menu-item.active {
+            background-color: #e9ecef;
+            border-left: 4px solid var(--primary);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .settings-menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Settings Content */
+        .settings-content {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+        }
+        
+        .settings-section {
+            display: none;
+        }
+        
+        .settings-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--dark-text);
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-help {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .toggle-label {
+            font-weight: 500;
+        }
+        
+        .toggle-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        /* Danger Zone */
+        .danger-zone {
+            border: 1px solid #ffcccc;
+            background-color: #fff5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .danger-zone-title {
+            color: var(--danger);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .danger-zone-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        /* Social Accounts */
+        .social-accounts {
+            margin-top: 30px;
+        }
+        
+        .social-account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .social-account-item:last-child {
+            border-bottom: none;
+        }
+        
+        .social-account-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .social-google {
+            background-color: #DB4437;
+        }
+        
+        .social-facebook {
+            background-color: #4267B2;
+        }
+        
+        .social-twitter {
+            background-color: #1DA1F2;
+        }
+        
+        .social-linkedin {
+            background-color: #0077B5;
+        }
+        
+        .social-github {
+            background-color: #333;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-text);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: modalFadeIn 0.3s ease;
+            overflow: hidden;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .modal-footer {
+            padding: 20px 25px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .settings-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-sidebar {
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .navbar-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-container">
+                    <div class="navbar-brand">
+                        <a class="navbar-caption" href="index.html">Talent Bridge</a>
+                    </div>
+                    <div class="navbar-buttons">
+                        
+                        <a href="hire talent.html" class="btn btn-outline">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Account Settings</h1>
+            <p class="page-subtitle">Manage your account security and preferences</p>
+        </div>
+    </section>
+
+    <!-- Settings Container -->
+    <section class="settings-container container">
+        <!-- Settings Sidebar -->
+        <div class="settings-sidebar">
+            <ul class="settings-menu">
+                <li class="settings-menu-item active" data-target="account">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Account & Security</span>
+                </li>
+                <li class="settings-menu-item" data-target="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </li>
+                <li class="settings-menu-item" data-target="delete">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Delete Account</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="settings-content">
+            <!-- Account & Security Section -->
+            <div class="settings-section active" id="account">
+                <h2 class="section-title">Account & Security</h2>
+                
+                <div class="form-group">
+                    <label for="currentPassword" class="form-label">Current Password</label>
+                    <input type="password" id="currentPassword" class="form-control" placeholder="Enter your current password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword" class="form-label">New Password</label>
+                    <input type="password" id="newPassword" class="form-control" placeholder="Enter a new password">
+                    <div class="form-help">Must be at least 8 characters long</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your new password">
+                </div>
+                
+                <button class="btn btn-primary" id="changePasswordBtn">Change Password</button>
+                
+                <div class="toggle-group">
+                    <div>
+                        <div class="toggle-label">Two-Factor Authentication (2FA)</div>
+                        <div class="toggle-description">Add an extra layer of security to your account</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="twoFactorAuth">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="social-accounts">
+                    <h3 style="margin-bottom: 20px;">Connected Accounts</h3>
+                    
+                    <div class="social-account-item">
+                        <div class="social-account-info">
+                            <div class="social-icon social-google">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div>
+                                <h4>Google</h4>
+                                <p>Connected as john.doe@gmail.com</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" data-provider="google">Disconnect</button>
+                    </div>
+                    
+                    <div class="social-account-item">
+                        <div class="social-account-info">
+                            <div class="social-icon social-linkedin">
+                                <i class="fab fa-linkedin-in"></i>
+                            </div>
+                            <div>
+                                <h4>LinkedIn</h4>
+                                <p>Not connected</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" data-provider="linkedin">Connect</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Logout Section -->
+            <div class="settings-section" id="logout">
+                <h2 class="section-title">Logout</h2>
+                
+                <div class="danger-zone">
+                    <h3 class="danger-zone-title">Logout Options</h3>
+                    <p class="danger-zone-description">You can log out from this device only or from all devices where you're currently logged in.</p>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <button class="btn btn-outline" id="logoutCurrentBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout from This Device
+                        </button>
+                        <button class="btn btn-danger" id="logoutAllBtn">
+                            <i class="fas fa-users"></i> Logout from All Devices
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delete Account Section -->
+            <div class="settings-section" id="delete">
+                <h2 class="section-title">Delete Account</h2>
+                
+                <div class="danger-zone">
+                    <h3 class="danger-zone-title">Permanently Delete Account</h3>
+                    <p class="danger-zone-description">Once you delete your account, there is no going back. All your data, including ideas and profile information, will be permanently deleted.</p>
+                    <button class="btn btn-danger" id="deleteAccountBtn">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delete Account Modal -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Account</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone. All your data, including ideas and profile information, will be permanently deleted.</p>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="confirmDelete" class="form-label">Type "DELETE" to confirm</label>
+                    <input type="text" id="confirmDelete" class="form-control" placeholder="Type DELETE to confirm">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn" disabled>Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout All Modal -->
+    <div id="logoutAllModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Logout from All Devices</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to log out from all devices? This will end all active sessions and you'll need to log in again on each device.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelLogoutAllBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmLogoutAllBtn">Logout Everywhere</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Current Modal -->
+    <div id="logoutCurrentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Logout from This Device</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to log out from this device?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelLogoutCurrentBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmLogoutCurrentBtn">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Success!</h3>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage">Your changes have been saved successfully.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeSuccessBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i>  +91-90000-12345</li>
+                        <li><i class="fas fa-envelope"></i> team@talentbridge.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Bengaluru,India</li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="post-idea.html">Post Idea</a></li>
+                        <li><a href="ideas.html">My Ideas</a></li>
+                        <li><a href="settings.html">Settings</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 IdeaHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation between settings sections
+        document.querySelectorAll('.settings-menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.settings-menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.settings-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // Change password functionality
+        document.getElementById('changePasswordBtn').addEventListener('click', function() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword) {
+                alert('Please enter your current password.');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                alert('New password must be at least 8 characters long.');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match.');
+                return;
+            }
+            
+            showSuccess('Password changed successfully.');
+            
+            // Clear password fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        });
+
+        // Social account connection
+        document.querySelectorAll('.social-account-item .btn-primary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const platform = this.getAttribute('data-provider');
+                alert(`In a real application, this would connect your ${platform} account.`);
+                this.textContent = 'Disconnect';
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-outline');
+                this.closest('.social-account-item').querySelector('p').textContent = 'Connected';
+            });
+        });
+
+        document.querySelectorAll('.social-account-item .btn-outline').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const platform = this.getAttribute('data-provider');
+                if (confirm(`Are you sure you want to disconnect your ${platform} account?`)) {
+                    this.textContent = 'Connect';
+                    this.classList.remove('btn-outline');
+                    this.classList.add('btn-primary');
+                    this.closest('.social-account-item').querySelector('p').textContent = 'Not connected';
+                }
+            });
+        });
+
+        // Delete account functionality
+        document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+            document.getElementById('deleteAccountModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
+            document.getElementById('deleteAccountModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        document.getElementById('confirmDelete').addEventListener('input', function() {
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            confirmBtn.disabled = this.value !== 'DELETE';
+        });
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            alert('In a real application, this would delete the user account.');
+            document.getElementById('deleteAccountModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Redirect to home page after account deletion
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        // Logout all devices functionality
+        document.getElementById('logoutAllBtn').addEventListener('click', function() {
+            document.getElementById('logoutAllModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('cancelLogoutAllBtn').addEventListener('click', function() {
+            document.getElementById('logoutAllModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        document.getElementById('confirmLogoutAllBtn').addEventListener('click', function() {
+            alert('In a real application, this would log out from all devices.');
+            document.getElementById('logoutAllModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            showSuccess('You have been logged out from all devices.');
+            
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        });
+
+        // Logout current device functionality
+        document.getElementById('logoutCurrentBtn').addEventListener('click', function() {
+            document.getElementById('logoutCurrentModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('cancelLogoutCurrentBtn').addEventListener('click', function() {
+            document.getElementById('logoutCurrentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        document.getElementById('confirmLogoutCurrentBtn').addEventListener('click', function() {
+            alert('In a real application, this would log you out from this device.');
+            document.getElementById('logoutCurrentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        });
+
+        // Success modal functionality
+        function showSuccess(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.getElementById('closeSuccessBtn').addEventListener('click', function() {
+            document.getElementById('successModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Toggle switch functionality
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                // In a real application, this would save the toggle state to the server
+                console.log(`Toggle ${this.checked ? 'enabled' : 'disabled'}`);
+                
+                if (this.id === 'twoFactorAuth' && this.checked) {
+                    showSuccess('Two-factor authentication has been enabled. You will be prompted to set it up on your next login.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

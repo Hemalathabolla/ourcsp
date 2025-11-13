@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Your Idea | Idea Provider Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5aa0;
+            --primary-light: #4a7bc8;
+            --secondary: #f8f9fa;
+            --accent: #3a7bd5;
+            --light-bg: #f3f5f9;
+            --dark-text: #232323;
+            --light-text: #fafafa;
+            --text-color: rgba(0, 0, 0, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --pastel-blue: #e6f0ff;
+            --pastel-green: #e6f7f0;
+            --pastel-yellow: #fff9e6;
+            --pastel-pink: #ffe6f2;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter Tight', sans-serif;
+            background-color: white;
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Typography */
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+        
+        .btn-secondary {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #2a6bc7;
+            border-color: #2a6bc7;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 18px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-edit {
+            background-color: var(--warning);
+            color: var(--dark-text);
+            border-color: var(--warning);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+        
+        .btn-edit:hover {
+            background-color: #e0a800;
+            border-color: #e0a800;
+        }
+        
+        /* Header & Navigation */
+        .navbar {
+            background-color: white;
+            padding: 12px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            padding: 8px 0;
+            background-color: white;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-caption {
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.4rem;
+        }
+        
+        .navbar-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 80px;
+            color: var(--dark-text);
+            position: relative;
+            min-height: 40vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--pastel-blue) 0%, white 100%);
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            margin-bottom: 28px;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            color: var(--primary);
+        }
+        
+        .hero p {
+            margin-bottom: 30px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        /* Idea Form Section */
+        .idea-form-section {
+            padding: 80px 0;
+            background-color: var(--light-bg);
+        }
+        
+        .form-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .form-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .form-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .form-header h2 {
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-header p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+        
+        .form-body {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Inter Tight', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-help {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+        }
+        
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .file-upload p {
+            margin-bottom: 10px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 15px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background-color: var(--light-bg);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .file-name {
+            flex: 1;
+        }
+        
+        .file-remove {
+            color: var(--danger);
+            cursor: pointer;
+        }
+        
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+            border-top: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Edit Button */
+        .edit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--warning);
+            color: var(--dark-text);
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: modalFadeIn 0.3s ease;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .modal-text {
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--pastel-blue);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .navbar-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 0;
+            }
+            
+            .navbar-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .navbar {
+                height: auto;
+                padding: 12px 0;
+            }
+            
+            .hero {
+                padding: 140px 0 60px;
+                min-height: 30vh;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-body {
+                padding: 30px;
+            }
+            
+            .form-footer {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px 30px;
+            }
+            
+            .form-actions {
+                width: 100%;
+            }
+            
+            .form-actions .btn {
+                flex: 1;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero {
+                padding: 120px 0 40px;
+                min-height: 25vh;
+            }
+            
+            .edit-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .form-header {
+                padding: 20px;
+            }
+            
+            .form-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-container">
+                    <div class="navbar-brand">
+                        <a class="navbar-caption" href="index.html">Idea Provider Platform</a>
+                    </div>
+                    <div class="navbar-buttons">
+                        <a href="join as talent.html" class="btn btn-outline">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">Share Your Brilliant Idea</h1>
+                <p class="fade-in delay-1">Got a game-changing concept? Submit it to our platform and connect with the resources to make it happen.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Idea Form Section -->
+    <section class="idea-form-section">
+        <div class="container">
+            <div class="form-container fade-in">
+                <div class="form-header">
+                    <h2>Post Your Idea</h2>
+                    <p>Fill out the form below to submit your idea for consideration</p>
+                </div>
+                
+                <!-- Edit Button -->
+                <button type="button" class="edit-btn" id="editFormBtn">
+                    <i class="fas fa-edit"></i> Edit Form
+                </button>
+                
+                <form id="ideaForm">
+                    <div class="form-body">
+                        <!-- Basic Information -->
+                        <div class="form-group">
+                            <label for="ideaTitle" class="form-label">Idea Title *</label>
+                            <input type="text" id="ideaTitle" class="form-control" placeholder="Give your idea a catchy title" required>
+                            <div class="form-help">Make it descriptive and attention-grabbing</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ideaCategory" class="form-label">Category *</label>
+                            <select id="ideaCategory" class="form-control" required>
+                                <option value="">Select a category</option>
+                                <option value="technology">Technology</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="education">Education</option>
+                                <option value="sustainability">Sustainability</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="finance">Finance</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ideaDescription" class="form-label">Idea Description *</label>
+                            <textarea id="ideaDescription" class="form-control" placeholder="Describe your idea in detail. What problem does it solve? How does it work?" required></textarea>
+                            <div class="form-help">Be as detailed as possible. The more information, the better.</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactEmail" class="form-label">Contact Email *</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="Your email address" required>
+                            <div class="form-help">This will be used to contact you about your idea</div>
+                        </div>
+                        
+                        <!-- Detailed Information -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="targetAudience" class="form-label">Target Audience</label>
+                                <input type="text" id="targetAudience" class="form-control" placeholder="Who will benefit from your idea?">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="budgetEstimate" class="form-label">Estimated Budget</label>
+                                <input type="text" id="budgetEstimate" class="form-control" placeholder="e.g. $5,000 - $10,000">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="implementationPlan" class="form-label">Implementation Plan</label>
+                            <textarea id="implementationPlan" class="form-control" placeholder="How do you envision this idea being implemented? What are the key steps?"></textarea>
+                            <div class="form-help">Outline the steps needed to bring your idea to life</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="collaborators" class="form-label">Looking for Collaborators?</label>
+                            <select id="collaborators" class="form-control">
+                                <option value="">Select an option</option>
+                                <option value="yes">Yes, I'm looking for collaborators</option>
+                                <option value="no">No, I'm working solo</option>
+                                <option value="maybe">Maybe, open to collaboration</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Supporting Materials</label>
+                            <div class="file-upload" id="fileUploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop files here or click to browse</p>
+                                <span class="btn btn-outline">Select Files</span>
+                                <input type="file" id="fileInput" class="file-input" multiple>
+                            </div>
+                            <div class="file-list" id="fileList"></div>
+                            <div class="form-help">Upload images, documents, or other files that support your idea (Max 10MB per file)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="termsAgreement" class="form-check-input" required>
+                                <label for="termsAgreement" class="form-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> *</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-footer">
+                        <div>
+                            <p><small>* Required fields</small></p>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" id="saveDraftBtn">Save as Draft</button>
+                            <button type="submit" class="btn btn-primary" id="submitIdeaBtn">Submit Idea</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="modal-title">Idea Submitted Successfully!</h2>
+            <p class="modal-text">Your idea has been submitted and is now under review. We'll notify you via email once it's been processed.</p>
+            <div class="form-actions">
+                <button class="btn btn-outline" id="viewIdeasBtn">View Other Ideas</button>
+                <button class="btn btn-primary" id="postAnotherBtn">Post Another Idea</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +91-90000-12345</li>
+                        <li><i class="fas fa-envelope"></i> team@talentbridge.com </li>
+                        <li><i class="fas fa-map-marker-alt"></i>Bengaluru,India </li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#">Post Idea</a></li>
+                        <li><a href="#">Browse Ideas</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Idea Provider Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // File upload functionality
+        const fileInput = document.getElementById('fileInput');
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileList = document.getElementById('fileList');
+        const files = [];
+
+        fileUploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--primary)';
+            fileUploadArea.style.backgroundColor = 'rgba(44, 90, 160, 0.05)';
+        });
+
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.style.borderColor = '#ddd';
+            fileUploadArea.style.backgroundColor = 'transparent';
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = '#ddd';
+            fileUploadArea.style.backgroundColor = 'transparent';
+            
+            const droppedFiles = e.dataTransfer.files;
+            handleFiles(droppedFiles);
+        });
+
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+
+        function handleFiles(fileList) {
+            for (let i = 0; i < fileList.length; i++) {
+                const file = fileList[i];
+                
+                // Check file size (10MB limit)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`File "${file.name}" is too large. Maximum file size is 10MB.`);
+                    continue;
+                }
+                
+                files.push(file);
+                displayFile(file);
+            }
+            
+            // Reset file input
+            fileInput.value = '';
+        }
+
+        function displayFile(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            
+            const fileName = document.createElement('span');
+            fileName.className = 'file-name';
+            fileName.textContent = file.name;
+            
+            const fileRemove = document.createElement('span');
+            fileRemove.className = 'file-remove';
+            fileRemove.innerHTML = '<i class="fas fa-times"></i>';
+            fileRemove.addEventListener('click', () => {
+                const index = files.indexOf(file);
+                if (index > -1) {
+                    files.splice(index, 1);
+                }
+                fileItem.remove();
+            });
+            
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(fileRemove);
+            fileList.appendChild(fileItem);
+        }
+
+        // Form submission
+        const ideaForm = document.getElementById('ideaForm');
+        const saveDraftBtn = document.getElementById('saveDraftBtn');
+        const submitIdeaBtn = document.getElementById('submitIdeaBtn');
+        const successModal = document.getElementById('successModal');
+        const viewIdeasBtn = document.getElementById('viewIdeasBtn');
+        const postAnotherBtn = document.getElementById('postAnotherBtn');
+        const editFormBtn = document.getElementById('editFormBtn');
+
+        ideaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Validate form
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Show loading state
+            submitIdeaBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitIdeaBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Show success modal
+                successModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                
+                // Reset form
+                ideaForm.reset();
+                files.length = 0;
+                fileList.innerHTML = '';
+                
+                // Reset button
+                submitIdeaBtn.innerHTML = 'Submit Idea';
+                submitIdeaBtn.disabled = false;
+            }, 1500);
+        });
+
+        function validateForm() {
+            let isValid = true;
+            
+            const requiredFields = document.querySelectorAll('#ideaForm [required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#ff6b6b';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Please fill in all required fields before submitting.');
+            }
+            
+            return isValid;
+        }
+
+        // Edit button functionality
+        editFormBtn.addEventListener('click', () => {
+            // Highlight all form fields
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(control => {
+                control.style.borderColor = 'var(--primary)';
+                control.style.boxShadow = '0 0 0 2px rgba(44, 90, 160, 0.2)';
+            });
+            
+            // Scroll to top of form
+            document.querySelector('.form-container').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+            
+            // Show confirmation message
+            const originalText = editFormBtn.textContent;
+            editFormBtn.innerHTML = '<i class="fas fa-check"></i> Editing Mode';
+            editFormBtn.style.backgroundColor = 'var(--success)';
+            editFormBtn.style.color = 'white';
+            
+            setTimeout(() => {
+                editFormBtn.innerHTML = originalText;
+                editFormBtn.style.backgroundColor = '';
+                editFormBtn.style.color = '';
+                
+                // Remove highlights
+                formControls.forEach(control => {
+                    control.style.borderColor = '';
+                    control.style.boxShadow = '';
+                });
+            }, 3000);
+        });
+
+        saveDraftBtn.addEventListener('click', () => {
+            // Save form data to localStorage
+            const formData = new FormData(ideaForm);
+            const formObject = {};
+            
+            for (let [key, value] of formData.entries()) {
+                formObject[key] = value;
+            }
+            
+            // Save file names
+            formObject.fileNames = files.map(file => file.name);
+            
+            localStorage.setItem('ideaDraft', JSON.stringify(formObject));
+            
+            // Show confirmation
+            const originalText = saveDraftBtn.textContent;
+            saveDraftBtn.textContent = 'Draft Saved!';
+            saveDraftBtn.style.backgroundColor = 'var(--success)';
+            saveDraftBtn.style.color = 'white';
+            
+            setTimeout(() => {
+                saveDraftBtn.textContent = originalText;
+                saveDraftBtn.style.backgroundColor = '';
+                saveDraftBtn.style.color = '';
+            }, 2000);
+        });
+
+        // Load draft if exists
+        window.addEventListener('load', () => {
+            const draft = localStorage.getItem('ideaDraft');
+            if (draft) {
+                const formObject = JSON.parse(draft);
+                
+                for (const key in formObject) {
+                    if (key !== 'fileNames') {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            element.value = formObject[key];
+                        }
+                    }
+                }
+                
+                // Show draft loaded message
+                const draftMessage = document.createElement('div');
+                draftMessage.style.cssText = 'background-color: var(--pastel-blue); padding: 10px; border-radius: 5px; margin-bottom: 20px;';
+                draftMessage.innerHTML = '<i class="fas fa-info-circle"></i> Draft loaded. You can continue editing.';
+                
+                const formBody = document.querySelector('.form-body');
+                formBody.insertBefore(draftMessage, formBody.firstChild);
+            }
+        });
+
+        // Modal buttons
+        viewIdeasBtn.addEventListener('click', () => {
+            window.location.href = 'index.html#ideas';
+        });
+
+        postAnotherBtn.addEventListener('click', () => {
+            successModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                successModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Fade-in animation on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = "1";
+                    element.style.transform = "translateY(0)";
+                }
+            });
+        };
+        
+        // Set initial state for fade elements
+        fadeElements.forEach(element => {
+            element.style.opacity = "0";
+            element.style.transform = "translateY(20px)";
+            element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        });
+        
+        window.addEventListener('scroll', fadeInOnScroll);
+        // Trigger once on load
+        window.addEventListener('load', fadeInOnScroll);
+    </script>
+</body>
+</html>

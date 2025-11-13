@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Idea Provider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title i {
+            color: var(--accent);
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .profile-sidebar {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            text-align: center;
+            height: fit-content;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .change-photo {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .change-photo:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .analytics-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .analytics-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .analytics-title i {
+            color: var(--accent);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+
+        .profile-form-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            position: relative;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .skill-tag i {
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .add-skill {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .add-skill input {
+            flex: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #3d9a35;
+        }
+
+        .form-actions-bottom {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .save-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 30px 0 15px;
+            color: var(--primary);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .auto-save-indicator {
+            font-size: 12px;
+            color: var(--success);
+            margin-top: 5px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions-bottom {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="header-title">
+                <i class="fas fa-user-circle"></i>
+                My Profile
+            </h1>
+        </header>
+
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-pic-container">
+                    <div class="profile-pic" id="profilePic">
+                        <span>No Photo<br>Click to Add</span>
+                    </div>
+                    <div class="change-photo" id="changePhotoBtn">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <input type="file" id="photoUpload" class="file-input" accept="image/*">
+                </div>
+                <h1 class="profile-name" id="displayName">Your Name</h1>
+                <p class="profile-title" id="displayTitle">Your Title</p>
+                
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Ideas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Implemented</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">0%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3 class="analytics-title">
+                        <i class="fas fa-chart-line"></i>
+                        Review Trends
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="reviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-form-container">
+                <div class="form-header">
+                    <h2 class="form-title">Profile Details</h2>
+                </div>
+                
+                <form id="profileForm">
+                    <!-- Personal Information Section -->
+                    <h3 class="section-title">Personal Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name">
+                            <div class="auto-save-indicator" id="firstNameIndicator">Saved</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter your last name">
+                            <div class="auto-save-indicator" id="lastNameIndicator">Saved</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="your.email@example.com">
+                            <div class="auto-save-indicator" id="emailIndicator">Saved</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="+1 (555) 123-4567">
+                            <div class="auto-save-indicator" id="phoneIndicator">Saved</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" placeholder="City, State/Country">
+                        <div class="auto-save-indicator" id="locationIndicator">Saved</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Bio</label>
+                        <textarea class="form-control" id="bio" placeholder="Tell us about yourself, your interests, and what drives you..."></textarea>
+                        <div class="auto-save-indicator" id="bioIndicator">Saved</div>
+                    </div>
+                    
+                    <!-- Professional Information Section -->
+                    <h3 class="section-title">Professional Information</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Professional Title</label>
+                        <input type="text" class="form-control" id="professionalTitle" placeholder="e.g. Innovation Strategist, Product Manager">
+                        <div class="auto-save-indicator" id="professionalTitleIndicator">Saved</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Company/Organization</label>
+                        <input type="text" class="form-control" id="company" placeholder="Where do you work?">
+                        <div class="auto-save-indicator" id="companyIndicator">Saved</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Industry</label>
+                            <select class="form-control" id="industry">
+                                <option value="" disabled selected>Select your industry</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Consulting">Consulting</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="auto-save-indicator" id="industryIndicator">Saved</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Years of Experience</label>
+                            <input type="number" class="form-control" id="experience" placeholder="0" min="0" max="50">
+                            <div class="auto-save-indicator" id="experienceIndicator">Saved</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Areas of Expertise</label>
+                        <div class="skills-container" id="skillsContainer">
+                            <!-- Skills will be added here dynamically -->
+                        </div>
+                        <div class="add-skill">
+                            <input type="text" class="form-control" id="newSkill" placeholder="Add a skill">
+                            <button type="button" class="btn" id="addSkillBtn">Add</button>
+                        </div>
+                        <div class="auto-save-indicator" id="skillsIndicator">Saved</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">LinkedIn Profile</label>
+                        <input type="url" class="form-control" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                        <div class="auto-save-indicator" id="linkedinIndicator">Saved</div>
+                    </div>
+                    
+                    <div class="form-actions-bottom">
+                        <button type="button" class="btn btn-outline" id="saveDraftBtn">Save Draft</button>
+                        <button type="submit" class="btn btn-success" id="saveBtn">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Notification -->
+    <div class="save-notification" id="saveNotification">
+        <i class="fas fa-check-circle"></i> Profile saved successfully!
+    </div>
+
+    <script>
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing form...');
+            
+            // Form elements
+            const saveBtn = document.getElementById('saveBtn');
+            const saveDraftBtn = document.getElementById('saveDraftBtn');
+            const saveNotification = document.getElementById('saveNotification');
+            const profileForm = document.getElementById('profileForm');
+            
+            // Initial skills
+            const initialSkills = ['Product Strategy', 'Market Research', 'UX Design', 'Prototyping', 'Innovation Workshops'];
+            
+            // Initialize the form
+            function initializeForm() {
+                console.log('Initializing form...');
+                
+                // Load saved data from localStorage
+                loadSavedData();
+                
+                // Set up event listeners
+                setupEventListeners();
+                
+                // Render initial skills
+                renderSkills();
+                
+                // Create the chart
+                createReviewChart();
+                
+                console.log('Form initialization complete');
+            }
+            
+            // Load saved data from localStorage
+            function loadSavedData() {
+                const savedData = localStorage.getItem('profileData');
+                if (savedData) {
+                    try {
+                        const data = JSON.parse(savedData);
+                        console.log('Loading saved data:', data);
+                        
+                        // Fill form fields with saved data
+                        Object.keys(data).forEach(key => {
+                            const element = document.getElementById(key);
+                            if (element) {
+                                element.value = data[key] || '';
+                                console.log(`Set ${key} to:`, data[key]);
+                            }
+                        });
+                        
+                        // Load skills
+                        if (data.skills && Array.isArray(data.skills)) {
+                            initialSkills.length = 0;
+                            data.skills.forEach(skill => initialSkills.push(skill));
+                            renderSkills();
+                        }
+                        
+                        // Update display
+                        updateDisplay();
+                    } catch (e) {
+                        console.error('Error loading saved data:', e);
+                    }
+                } else {
+                    console.log('No saved data found');
+                }
+            }
+            
+            // Set up event listeners
+            function setupEventListeners() {
+                console.log('Setting up event listeners...');
+                
+                // Save button functionality
+                saveBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Save button clicked');
+                    saveData(false);
+                });
+                
+                // Save Draft button functionality
+                saveDraftBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Save Draft button clicked');
+                    saveData(true);
+                });
+                
+                // Form submit handler
+                profileForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    console.log('Form submitted');
+                    saveData(false);
+                });
+                
+                // Auto-save functionality for form fields
+                setupAutoSave();
+                
+                // Skills functionality
+                const addSkillBtn = document.getElementById('addSkillBtn');
+                const newSkillInput = document.getElementById('newSkill');
+                
+                addSkillBtn.addEventListener('click', () => {
+                    const newSkill = newSkillInput.value.trim();
+                    console.log('Adding skill:', newSkill);
+                    if (newSkill && !initialSkills.includes(newSkill)) {
+                        initialSkills.push(newSkill);
+                        renderSkills();
+                        newSkillInput.value = '';
+                        // Auto-save when skills are updated
+                        saveData(true);
+                        showFieldIndicator('skillsIndicator');
+                    }
+                });
+                
+                newSkillInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addSkillBtn.click();
+                    }
+                });
+                
+                // Photo upload functionality
+                const profilePic = document.getElementById('profilePic');
+                const changePhotoBtn = document.getElementById('changePhotoBtn');
+                const photoUpload = document.getElementById('photoUpload');
+                
+                changePhotoBtn.addEventListener('click', () => {
+                    console.log('Change photo clicked');
+                    photoUpload.click();
+                });
+                
+                profilePic.addEventListener('click', () => {
+                    console.log('Profile pic clicked');
+                    photoUpload.click();
+                });
+                
+                photoUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    console.log('Photo selected:', file);
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            profilePic.innerHTML = '';
+                            profilePic.style.backgroundImage = `url(${e.target.result})`;
+                            profilePic.style.backgroundSize = 'cover';
+                            profilePic.style.backgroundPosition = 'center';
+                            
+                            // Save photo to localStorage
+                            localStorage.setItem('profilePhoto', e.target.result);
+                            console.log('Photo saved to localStorage');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+                
+                console.log('Event listeners set up successfully');
+            }
+            
+            // Set up auto-save for form fields
+            function setupAutoSave() {
+                const formFields = [
+                    'firstName', 'lastName', 'email', 'phone', 'location', 'bio',
+                    'professionalTitle', 'company', 'industry', 'experience', 'linkedin'
+                ];
+                
+                formFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.addEventListener('input', () => {
+                            // Show saving indicator
+                            showFieldIndicator(fieldId + 'Indicator');
+                            
+                            // Auto-save after a short delay
+                            clearTimeout(window.autoSaveTimeout);
+                            window.autoSaveTimeout = setTimeout(() => {
+                                saveData(true);
+                            }, 1000);
+                        });
+                        
+                        // For select fields, also listen for change events
+                        if (field.tagName === 'SELECT') {
+                            field.addEventListener('change', () => {
+                                showFieldIndicator(fieldId + 'Indicator');
+                                saveData(true);
+                            });
+                        }
+                    }
+                });
+            }
+            
+            // Show field save indicator
+            function showFieldIndicator(indicatorId) {
+                const indicator = document.getElementById(indicatorId);
+                if (indicator) {
+                    indicator.style.display = 'block';
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 2000);
+                }
+            }
+            
+            // Save data to localStorage
+            function saveData(isDraft = false) {
+                console.log('Saving data, isDraft:', isDraft);
+                
+                const formData = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    location: document.getElementById('location').value,
+                    bio: document.getElementById('bio').value,
+                    professionalTitle: document.getElementById('professionalTitle').value,
+                    company: document.getElementById('company').value,
+                    industry: document.getElementById('industry').value,
+                    experience: document.getElementById('experience').value,
+                    linkedin: document.getElementById('linkedin').value,
+                    skills: [...initialSkills]
+                };
+                
+                console.log('Form data to save:', formData);
+                
+                localStorage.setItem('profileData', JSON.stringify(formData));
+                
+                // Update display
+                updateDisplay();
+                
+                // Show notification for final save
+                if (!isDraft) {
+                    showSaveNotification('Profile saved successfully!');
+                }
+            }
+            
+            // Update display name and title
+            function updateDisplay() {
+                const firstName = document.getElementById('firstName').value || 'Your Name';
+                const lastName = document.getElementById('lastName').value || '';
+                const professionalTitle = document.getElementById('professionalTitle').value || 'Your Title';
+                
+                const displayName = `${firstName} ${lastName}`.trim() || 'Your Name';
+                const displayTitle = professionalTitle || 'Your Title';
+                
+                document.getElementById('displayName').textContent = displayName;
+                document.getElementById('displayTitle').textContent = displayTitle;
+                
+                console.log('Display updated - Name:', displayName, 'Title:', displayTitle);
+            }
+            
+            // Show save notification
+            function showSaveNotification(message) {
+                console.log('Showing notification:', message);
+                saveNotification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+                saveNotification.style.display = 'block';
+                
+                setTimeout(() => {
+                    saveNotification.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Skills functionality
+            function renderSkills() {
+                console.log('Rendering skills:', initialSkills);
+                const skillsContainer = document.getElementById('skillsContainer');
+                skillsContainer.innerHTML = '';
+                
+                initialSkills.forEach(skill => {
+                    const skillTag = document.createElement('div');
+                    skillTag.className = 'skill-tag';
+                    skillTag.innerHTML = `
+                        ${skill}
+                        <i class="fas fa-times" data-skill="${skill}"></i>
+                    `;
+                    skillsContainer.appendChild(skillTag);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.skill-tag i').forEach(icon => {
+                    icon.addEventListener('click', (e) => {
+                        const skillToRemove = e.target.getAttribute('data-skill');
+                        console.log('Removing skill:', skillToRemove);
+                        const index = initialSkills.indexOf(skillToRemove);
+                        if (index > -1) {
+                            initialSkills.splice(index, 1);
+                            renderSkills();
+                            // Auto-save when skills are removed
+                            saveData(true);
+                            showFieldIndicator('skillsIndicator');
+                        }
+                    });
+                });
+            }
+            
+            // Load saved photo
+            const savedPhoto = localStorage.getItem('profilePhoto');
+            if (savedPhoto) {
+                console.log('Loading saved photo');
+                const profilePic = document.getElementById('profilePic');
+                profilePic.innerHTML = '';
+                profilePic.style.backgroundImage = `url(${savedPhoto})`;
+                profilePic.style.backgroundSize = 'cover';
+                profilePic.style.backgroundPosition = 'center';
+            }
+            
+            // Review Chart - Modern line graph
+            function createReviewChart() {
+                console.log('Creating review chart');
+                const ctx = document.getElementById('reviewChart').getContext('2d');
+                
+                // Create gradient for the chart
+                const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+                gradient.addColorStop(0, 'rgba(67, 97, 238, 0.3)');
+                gradient.addColorStop(1, 'rgba(67, 97, 238, 0.05)');
+                
+                const reviewChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Monthly Reviews',
+                            data: [12, 19, 15, 22, 18, 25, 30, 28, 32, 35, 40, 38],
+                            borderColor: '#4361ee',
+                            backgroundColor: gradient,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#4361ee',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleFont: {
+                                    size: 14
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                cornerRadius: 8,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Reviews: ${context.raw}`;
+                                    },
+                                    title: function(context) {
+                                        return context[0].label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11,
+                                        weight: '500'
+                                    },
+                                    color: '#666'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)',
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    },
+                                    color: '#666',
+                                    callback: function(value) {
+                                        return value;
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Number of Reviews',
+                                    font: {
+                                        size: 12,
+                                        weight: 'bold'
+                                    },
+                                    color: '#555'
+                                }
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        elements: {
+                            line: {
+                                tension: 0.4
+                            }
+                        }
+                    }
+                });
+                
+                console.log('Review chart created successfully');
+            }
+            
+            // Initialize the form
+            initializeForm();
+        });
+    </script>
+</body>
+</html>

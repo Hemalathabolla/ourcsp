@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaHub | Messages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a0ca3;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #2b2d42;
+            --text-light: #6c757d;
+            --border: #e9ecef;
+            --sender-bg: #e7f3ff;
+            --receiver-bg: #f1f3f4;
+            --online: #4cc9f0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 35%;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-info h2 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 24px;
+            background-color: var(--light-bg);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .search-container {
+            padding: 15px;
+            background-color: var(--card-bg);
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-bg);
+            border-radius: 30px;
+            padding: 12px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box i {
+            color: var(--text-light);
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            padding: 0 15px 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background-color: var(--light-bg);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .conversations {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 10px;
+        }
+
+        .conversation {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            margin: 8px 0;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .conversation:hover {
+            background-color: var(--light-bg);
+            transform: translateY(-2px);
+        }
+
+        .conversation.active {
+            background-color: var(--sender-bg);
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.15);
+        }
+
+        .conversation.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .conversation-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            position: relative;
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--online);
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .conversation-info {
+            flex: 1;
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .conversation-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .conversation-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .conversation-preview {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: var(--light-bg);
+        }
+
+        .tag.urgent {
+            background-color: #ffe6e6;
+            color: #e74c3c;
+        }
+
+        .tag.new {
+            background-color: #e6f7ff;
+            color: var(--primary);
+        }
+
+        .tag.archived {
+            background-color: #f0f0f0;
+            color: var(--text-light);
+        }
+
+        .unread-badge {
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+
+        /* Chat Area Styles */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--light-bg);
+            position: relative;
+        }
+
+        .chat-header {
+            padding: 20px 25px;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .chat-contact {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .chat-contact-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .chat-contact-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+
+        .chat-contact-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--online);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .chat-icons {
+            display: flex;
+            gap: 25px;
+            color: var(--text-light);
+        }
+
+        .chat-icons i {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .chat-icons i:hover {
+            color: var(--primary);
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background-color: var(--sender-bg);
+            border-bottom-right-radius: 5px;
+            color: var(--text-dark);
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background-color: var(--receiver-bg);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        .message.received .message-time {
+            text-align: left;
+        }
+
+        .message-input-container {
+            padding: 20px 25px;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-icons {
+            display: flex;
+            gap: 20px;
+            color: var(--text-light);
+        }
+
+        .input-icons i {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .input-icons i:hover {
+            color: var(--primary);
+        }
+
+        .message-input {
+            flex: 1;
+            background-color: var(--light-bg);
+            border-radius: 30px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .message-input:focus-within {
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .message-input input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .date-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .date-divider span {
+            background-color: var(--light-bg);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            position: relative;
+            z-index: 1;
+        }
+
+        .date-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--border);
+            z-index: 0;
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .chat-area {
+                display: none;
+                width: 100%;
+            }
+            
+            .back-button {
+                display: block;
+            }
+            
+            .conversation.active + .chat-area {
+                display: flex;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar with conversations -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="profile">
+                    <div class="profile-img">IP</div>
+                    <div class="profile-info">
+                        <h2>Client</h2>
+                        <p>Available for collaborations</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Messages</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Unread</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Urgent</div>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search conversations...">
+                </div>
+            </div>
+            
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-filter="all">All</div>
+                <div class="filter-tab" data-filter="unread">Unread</div>
+                <div class="filter-tab" data-filter="urgent">Urgent</div>
+                <div class="filter-tab" data-filter="archived">Archived</div>
+            </div>
+            
+            <div class="conversations">
+                <!-- Conversations will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Chat area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-contact">
+                    <button class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="chat-contact-img" style="background-color: #4cc9f0;">TC</div>
+                    <div class="chat-contact-info">
+                        <h3>TechCorp Inc.</h3>
+                        <p><span class="status-dot"></span> Online - Last seen just now</p>
+                    </div>
+                </div>
+                <div class="chat-icons">
+                    <i class="fas fa-phone-alt"></i>
+                    <i class="fas fa-video"></i>
+                    <i class="fas fa-info-circle"></i>
+                </div>
+            </div>
+            
+            <div class="messages-container">
+                <!-- Messages will be populated here -->
+            </div>
+            
+            <div class="message-input-container">
+                <div class="input-icons">
+                    <i class="fas fa-smile"></i>
+                    <i class="fas fa-paperclip"></i>
+                </div>
+                <div class="message-input">
+                    <input type="text" placeholder="Type your message...">
+                </div>
+                <div class="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conversation data
+        const conversations = [
+            {
+                id: 'techcorp',
+                name: 'TechCorp Inc.',
+                status: 'Online - Last seen just now',
+                color: '#4cc9f0',
+                time: '10:42 AM',
+                preview: 'We love your product innovation idea!',
+                unread: 3,
+                tags: ['new', 'urgent'],
+                archived: false,
+                messages: `
+                    <div class="date-divider">
+                        <span>Today</span>
+                    </div>
+                    
+                    <div class="message received">
+                        Hello! We received your idea submission and we're very impressed.
+                        <div class="message-time">10:15 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        The concept of integrating AI with sustainable energy solutions is exactly what we're looking for.
+                        <div class="message-time">10:16 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Thank you! I'm glad you like the idea. I've been researching this area for over a year.
+                        <div class="message-time">10:20 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Could you share more details about the implementation timeline?
+                        <div class="message-time">10:22 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Absolutely. I have a detailed roadmap prepared. Should I email it to you?
+                        <div class="message-time">10:25 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Yes, please send it to innovation@techcorp.com. We'd also like to schedule a video call this week.
+                        <div class="message-time">10:30 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Perfect! I'm available on Wednesday and Thursday afternoons. What works best for your team?
+                        <div class="message-time">10:35 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Let's do Wednesday at 2 PM. I'll send the calendar invite shortly.
+                        <div class="message-time">10:42 AM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'startup',
+                name: 'Startup Galaxy',
+                status: 'Last seen yesterday at 5:30 PM',
+                color: '#7209b7',
+                time: 'Yesterday',
+                preview: 'Can we schedule a meeting to discuss your proposal?',
+                unread: 0,
+                tags: ['follow-up'],
+                archived: false,
+                messages: `
+                    <div class="date-divider">
+                        <span>Yesterday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        Hi there! We came across your profile and we're impressed with your ideas.
+                        <div class="message-time">2:30 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Thank you! I'm always excited to connect with innovative startups.
+                        <div class="message-time">2:45 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We're particularly interested in your blockchain solution for supply chain transparency.
+                        <div class="message-time">3:10 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        That's one of my favorite concepts! I've developed a prototype that reduces verification time by 70%.
+                        <div class="message-time">3:15 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Impressive! Can we schedule a meeting to discuss your proposal in more detail?
+                        <div class="message-time">3:20 PM</div>
+                    </div>
+                    
+                    <div class="date-divider">
+                        <span>Today</span>
+                    </div>
+                    
+                    <div class="message sent">
+                        I'd be happy to. I'm available Tuesday or Thursday next week.
+                        <div class="message-time">9:15 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Let's schedule for Tuesday at 11 AM. Does that work for you?
+                        <div class="message-time">10:30 AM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'venture',
+                name: 'Venture Capitalists',
+                status: 'Last seen today at 9:45 AM',
+                color: '#f72585',
+                time: 'Yesterday',
+                preview: 'We\'re interested in investing in your idea',
+                unread: 1,
+                tags: ['new'],
+                archived: false,
+                messages: `
+                    <div class="date-divider">
+                        <span>Yesterday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        Good afternoon. Our team reviewed your investment proposal.
+                        <div class="message-time">4:20 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We're interested in the AI healthcare platform you've conceptualized.
+                        <div class="message-time">4:22 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        That's great to hear! The platform has potential to reduce diagnostic errors by 40%.
+                        <div class="message-time">4:35 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We'd like to discuss funding options. Are you available for a call tomorrow?
+                        <div class="message-time">4:40 PM</div>
+                    </div>
+                    
+                    <div class="date-divider">
+                        <span>Today</span>
+                    </div>
+                    
+                    <div class="message sent">
+                        Yes, I'm available after 2 PM. Looking forward to our discussion.
+                        <div class="message-time">10:05 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Perfect. We'll send a calendar invite for 3 PM today.
+                        <div class="message-time">10:15 AM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'innovation',
+                name: 'Innovation Dept',
+                status: 'Last seen Monday at 2:15 PM',
+                color: '#3a0ca3',
+                time: 'Monday',
+                preview: 'We need more details about implementation',
+                unread: 0,
+                tags: [],
+                archived: false,
+                messages: `
+                    <div class="date-divider">
+                        <span>Monday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        We've been analyzing your sustainable packaging concept.
+                        <div class="message-time">11:30 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        The material science behind it is fascinating. How scalable is the production process?
+                        <div class="message-time">11:32 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        The process is highly scalable. I've designed it to work with existing manufacturing infrastructure.
+                        <div class="message-time">11:45 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        That's excellent. We need more details about implementation costs and timeline.
+                        <div class="message-time">11:50 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        I'll prepare a detailed report and send it over by end of day tomorrow.
+                        <div class="message-time">11:55 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Looking forward to reviewing it. We may have a pilot project for this.
+                        <div class="message-time">12:10 PM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'global',
+                name: 'Global Founders',
+                status: 'Last seen Sunday at 6:20 PM',
+                color: '#4895ef',
+                time: 'Sunday',
+                preview: 'Your idea aligns with our current focus areas',
+                unread: 0,
+                tags: [],
+                archived: true,
+                messages: `
+                    <div class="date-divider">
+                        <span>Sunday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        Your idea for the education technology platform aligns perfectly with our current focus areas.
+                        <div class="message-time">3:15 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        I'm glad to hear that! I believe personalized learning is the future of education.
+                        <div class="message-time">3:30 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We're particularly interested in the adaptive assessment component.
+                        <div class="message-time">3:45 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        That's the core innovation - the system adjusts difficulty based on student performance in real-time.
+                        <div class="message-time">4:00 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We'd like to explore a potential partnership. Can you share your development roadmap?
+                        <div class="message-time">4:15 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        I'll send over the roadmap and technical specifications tomorrow morning.
+                        <div class="message-time">4:30 PM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'eco',
+                name: 'EcoSolutions',
+                status: 'Last seen Friday at 4:10 PM',
+                color: '#2ec4b6',
+                time: 'Friday',
+                preview: 'Your sustainable packaging concept is revolutionary',
+                unread: 0,
+                tags: ['partnership'],
+                archived: false,
+                messages: `
+                    <div class="date-divider">
+                        <span>Friday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        Your sustainable packaging concept is revolutionary!
+                        <div class="message-time">9:20 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        The idea of using mushroom-based materials is brilliant. How durable are they?
+                        <div class="message-time">9:25 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        They're surprisingly durable! My tests show they can withstand up to 5kg of pressure.
+                        <div class="message-time">9:40 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We'd like to test these materials in our product line. Can you send samples?
+                        <div class="message-time">10:15 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Absolutely! I'll have samples ready by next Tuesday.
+                        <div class="message-time">10:30 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Excellent. We'll cover all shipping costs and provide detailed feedback.
+                        <div class="message-time">10:45 AM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'health',
+                name: 'HealthTech Partners',
+                status: 'Last seen Thursday at 5:30 PM',
+                color: '#e71d36',
+                time: 'Thursday',
+                preview: 'We\'d like to pilot your medical device innovation',
+                unread: 2,
+                tags: ['urgent', 'new'],
+                archived: false,
+                messages: `
+                    <div class="date-divider">
+                        <span>Thursday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        We're impressed with your medical device innovation for diabetes management.
+                        <div class="message-time">2:15 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Thank you! The non-invasive glucose monitoring was challenging to develop.
+                        <div class="message-time">2:30 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We'd like to pilot this in three of our clinics. What would the timeline look like?
+                        <div class="message-time">3:05 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        I can have 10 prototype units ready within 4 weeks for the pilot.
+                        <div class="message-time">3:20 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Perfect! Let's schedule a call to discuss the details next week.
+                        <div class="message-time">3:45 PM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Our medical director would like to join the call as well.
+                        <div class="message-time">4:10 PM</div>
+                    </div>
+                `
+            },
+            {
+                id: 'future',
+                name: 'Future Labs',
+                status: 'Last seen Wednesday at 3:15 PM',
+                color: '#ff9f1c',
+                time: 'Wednesday',
+                preview: 'Your AI algorithm shows promising results',
+                unread: 0,
+                tags: [],
+                archived: true,
+                messages: `
+                    <div class="date-divider">
+                        <span>Wednesday</span>
+                    </div>
+                    
+                    <div class="message received">
+                        Your AI algorithm for predicting market trends shows promising results in our tests.
+                        <div class="message-time">11:10 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        That's great to hear! The algorithm uses a novel approach to sentiment analysis.
+                        <div class="message-time">11:25 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        We achieved 87% accuracy in our backtesting. Have you considered patenting this?
+                        <div class="message-time">11:40 AM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        I've started the patent process. The international filing is underway.
+                        <div class="message-time">11:55 AM</div>
+                    </div>
+                    
+                    <div class="message received">
+                        Excellent. We'd like to discuss licensing options. Are you available Friday?
+                        <div class="message-time">12:15 PM</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        Friday works for me. What time would be convenient?
+                        <div class="message-time">12:30 PM</div>
+                    </div>
+                `
+            }
+        ];
+
+        // DOM elements
+        const conversationsContainer = document.querySelector('.conversations');
+        const messagesContainer = document.querySelector('.messages-container');
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const searchInput = document.querySelector('.search-box input');
+        
+        // Current filter state
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Function to render conversations based on filter
+        function renderConversations() {
+            conversationsContainer.innerHTML = '';
+            
+            const filteredConversations = conversations.filter(conv => {
+                // Apply search filter
+                if (currentSearch && !conv.name.toLowerCase().includes(currentSearch.toLowerCase()) && 
+                    !conv.preview.toLowerCase().includes(currentSearch.toLowerCase())) {
+                    return false;
+                }
+                
+                // Apply category filter
+                switch(currentFilter) {
+                    case 'unread':
+                        return conv.unread > 0 && !conv.archived;
+                    case 'urgent':
+                        return conv.tags.includes('urgent') && !conv.archived;
+                    case 'archived':
+                        return conv.archived;
+                    default:
+                        return !conv.archived;
+                }
+            });
+            
+            if (filteredConversations.length === 0) {
+                conversationsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <h3>No conversations found</h3>
+                        <p>No messages match your current filter criteria. Try changing your filter or search term.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredConversations.forEach((conv, index) => {
+                const conversationEl = document.createElement('div');
+                conversationEl.className = `conversation ${index === 0 ? 'active' : ''}`;
+                conversationEl.setAttribute('data-chat', conv.id);
+                
+                // Create tags HTML
+                let tagsHtml = '';
+                conv.tags.forEach(tag => {
+                    tagsHtml += `<div class="tag ${tag}">${tag.charAt(0).toUpperCase() + tag.slice(1)}</div>`;
+                });
+                
+                conversationEl.innerHTML = `
+                    <div class="conversation-img" style="background-color: ${conv.color};">
+                        ${conv.name.substring(0, 2)}
+                        ${conv.status.includes('Online') ? '<div class="online-indicator"></div>' : ''}
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <div class="conversation-name">${conv.name}</div>
+                            <div class="conversation-time">${conv.time}</div>
+                        </div>
+                        <div class="conversation-preview">${conv.preview}</div>
+                        ${tagsHtml ? `<div class="conversation-tags">${tagsHtml}</div>` : ''}
+                    </div>
+                    ${conv.unread > 0 ? `<div class="unread-badge">${conv.unread}</div>` : ''}
+                `;
+                
+                conversationsContainer.appendChild(conversationEl);
+            });
+            
+            // Add click event to conversations
+            document.querySelectorAll('.conversation').forEach(conv => {
+                conv.addEventListener('click', function() {
+                    document.querySelectorAll('.conversation').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const chatId = this.getAttribute('data-chat');
+                    loadChat(chatId);
+                });
+            });
+            
+            // Load first conversation if none is active
+            if (filteredConversations.length > 0 && !document.querySelector('.conversation.active')) {
+                loadChat(filteredConversations[0].id);
+            }
+        }
+
+        // Function to load chat data
+        function loadChat(chatId) {
+            const chat = conversations.find(c => c.id === chatId);
+            if (!chat) return;
+            
+            // Update chat header
+            document.querySelector('.chat-contact-img').textContent = chat.name.substring(0, 2);
+            document.querySelector('.chat-contact-img').style.backgroundColor = chat.color;
+            document.querySelector('.chat-contact-info h3').textContent = chat.name;
+            document.querySelector('.chat-contact-info p').innerHTML = `<span class="status-dot"></span> ${chat.status}`;
+            
+            // Update messages container
+            messagesContainer.innerHTML = chat.messages;
+            
+            // Scroll to bottom of messages
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Mark conversation as read
+            const conversation = conversations.find(c => c.id === chatId);
+            if (conversation) {
+                conversation.unread = 0;
+                renderConversations();
+            }
+            
+            // Show chat area on mobile
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').style.display = 'none';
+                document.querySelector('.chat-area').style.display = 'flex';
+            }
+        }
+
+        // Filter tabs functionality
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentFilter = this.getAttribute('data-filter');
+                renderConversations();
+            });
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            currentSearch = this.value;
+            renderConversations();
+        });
+
+        // Back button for mobile view
+        document.querySelector('.back-button').addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').style.display = 'flex';
+                document.querySelector('.chat-area').style.display = 'none';
+            }
+        });
+        
+        // Send message functionality
+        document.querySelector('.send-button').addEventListener('click', sendMessage);
+        document.querySelector('.message-input input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        function sendMessage() {
+            const input = document.querySelector('.message-input input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messagesContainer = document.querySelector('.messages-container');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message sent';
+                
+                const now = new Date();
+                const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+                
+                newMessage.innerHTML = `
+                    ${message}
+                    <div class="message-time">${timeString}</div>
+                `;
+                
+                messagesContainer.appendChild(newMessage);
+                input.value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Simulate a reply after a short delay
+                setTimeout(() => {
+                    const replies = [
+                        "Thanks for the update!",
+                        "Let me check with my team and get back to you.",
+                        "That sounds great!",
+                        "Can you provide more details about that?",
+                        "We'll review this and get back to you soon."
+                    ];
+                    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                    
+                    const replyMessage = document.createElement('div');
+                    replyMessage.className = 'message received';
+                    replyMessage.innerHTML = `
+                        ${randomReply}
+                        <div class="message-time">${timeString}</div>
+                    `;
+                    
+                    messagesContainer.appendChild(replyMessage);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        // Initialize the app
+        renderConversations();
+    </script>
+</body>
+</html>

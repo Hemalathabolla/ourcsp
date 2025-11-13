@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idea Provider Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e4e6c3;
+            --secondary: #383739;
+            --accent: #899878;
+            --light-bg: #f3f5f2;
+            --dark-text: #232323;
+            --light-text: #fafafa;
+            --overlay-green: rgba(100, 140, 100, 0.65);
+            --text-color: rgba(0, 0, 0, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter Tight', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .container-fluid {
+            width: 100%;
+            padding: 0 15px;
+        }
+        
+        /* Typography */
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: #747832;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #f4f5e7;
+            border-color: #f4f5e7;
+        }
+        
+        /* Header & Navigation */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 12px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            padding: 8px 0;
+            background-color: rgba(255, 255, 255, 0.98);
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-caption {
+            font-weight: 700;
+            color: var(--dark-text);
+            text-decoration: none;
+            font-size: 1.4rem;
+        }
+        
+        .navbar-center {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .nav-item {
+            margin: 0;
+        }
+        
+        .nav-link {
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent);
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            height: 2px;
+            width: 0;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .nav-link:hover::before {
+            width: 100%;
+        }
+        
+        .navbar-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--dark-text);
+            padding: 8px 18px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1531545514256-b1400bc00f31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 700px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero h1 {
+            margin-bottom: 28px;
+            font-size: 3.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            margin-bottom: 30px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+        
+        /* Features Section */
+        .section {
+            padding: 100px 0;
+        }
+        
+        .features {
+            background-color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .feature-img {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .feature-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .feature-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+            z-index: 2;
+            border-radius: 15px;
+            overflow-y: auto;
+        }
+        
+        .feature-card:hover .feature-content {
+            transform: translateY(0);
+        }
+        
+        .feature-card:hover .feature-img img {
+            opacity: 0.2;
+            transform: scale(1.1);
+        }
+        
+        .feature-card.active .feature-content {
+            transform: translateY(0);
+        }
+        
+        .feature-card.active .feature-img img {
+            opacity: 0.2;
+            transform: scale(1.1);
+        }
+        
+        .feature-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .feature-content ul {
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .feature-content li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+            color: #555;
+        }
+        
+        .feature-content li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-text);
+            z-index: 3;
+            display: none;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .content-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .content-text {
+            flex: 1;
+            padding-right: 50px;
+        }
+        
+        .content-image {
+            flex: 1;
+        }
+        
+        .content-image img {
+            width: 100%;
+            height: 570px;
+            object-fit: cover;
+            border-radius: 0 6rem 0 0;
+        }
+        
+        /* Header Section */
+        .header-section {
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .header-section .container-fluid {
+            padding: 0 56px;
+        }
+        
+        @media (max-width: 992px) {
+            .header-section .container-fluid {
+                padding: 0 22px;
+            }
+        }
+        
+        .title-wrapper {
+            position: absolute;
+            z-index: 1;
+            background-color: #ffffff;
+            padding: 24px 80px;
+            border-radius: 80px;
+            width: fit-content;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 992px) {
+            .title-wrapper {
+                position: static;
+                padding: 32px;
+                width: 100%;
+                transform: none;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        .mbr-section-title {
+            color: #000000;
+            text-align: center;
+            margin-bottom: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .image-wrapper img {
+            height: 560px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 992px) {
+            .image-wrapper img {
+                height: 350px;
+            }
+        }
+        
+        .image-wrap img {
+            height: 560px;
+            width: 65%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 992px) {
+            .image-wrap img {
+                height: 350px;
+                width: 100%;
+            }
+        }
+        
+        .content-wrapper {
+            padding: 55px 0;
+        }
+        
+        @media (max-width: 992px) {
+            .content-wrapper {
+                padding: 32px 0;
+            }
+        }
+        
+        .mbr-desc {
+            color: #000000;
+            margin-bottom: 32px;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .mbr-text {
+            color: #000000;
+            margin-bottom: 22px;
+            font-size: 1.1rem;
+        }
+        
+        .header-btn {
+            background-color: #3b71ca;
+            border-color: #3b71ca;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .header-btn:hover {
+            background-color: #386bc0;
+            border-color: #386bc0;
+            color: white;
+        }
+        
+        .header-row {
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin: 0 -6px;
+        }
+        
+        .header-card {
+            padding: 0 6px;
+            justify-content: center;
+            border: none;
+            background: transparent;
+        }
+        
+        /* Product Showcase */
+        .products {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .product-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-img {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-img::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: -1px;
+            height: 72px;
+            width: 55%;
+            border-radius: 0 64px 0 0;
+            background-color: var(--light-bg);
+        }
+        
+        .product-content {
+            padding: 25px;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .product-title {
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+        
+        .product-desc {
+            margin-bottom: 16px;
+            color: #666;
+        }
+        
+        /* Slider Section */
+        .slider-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .slider-slide {
+            min-width: 100%;
+            padding: 0 15px;
+        }
+        
+        .slide-content {
+            display: flex;
+            align-items: center;
+            background-color: #0a1604;
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+        }
+        
+        .slide-image {
+            flex: 1;
+        }
+        
+        .slide-image img {
+            height: 300px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .slide-text {
+            flex: 1;
+            padding: 16px 32px;
+        }
+        
+        .slide-title {
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+        
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .slider-dot.active {
+            background-color: var(--accent);
+        }
+        
+        /* How It Works Slider Section */
+        .how-it-works-section {
+            padding: 100px 0;
+            background-color: white;
+            position: relative;
+        }
+        
+        .how-it-works-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .how-it-works-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .how-it-works-slide {
+            min-width: 100%;
+            padding: 0 15px;
+        }
+        
+        .how-it-works-content {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .how-it-works-image {
+            flex: 1;
+            position: relative;
+        }
+        
+        .how-it-works-image img {
+            height: 400px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .how-it-works-text {
+            flex: 1;
+            padding: 0 40px;
+        }
+        
+        .how-it-works-title {
+            margin-bottom: 16px;
+            font-size: 1.8rem;
+            color: var(--dark-text);
+        }
+        
+        .how-it-works-desc {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .how-it-works-content-text {
+            margin-bottom: 22px;
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .how-it-works-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .how-it-works-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .how-it-works-dot.active {
+            background-color: var(--accent);
+        }
+        
+        .how-it-works-buttons {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 20px;
+            z-index: 10;
+        }
+        
+        .how-it-works-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--dark-text);
+            font-size: 1.2rem;
+        }
+        
+        .how-it-works-btn:hover {
+            background-color: var(--primary);
+            color: var(--dark-text);
+        }
+        
+        /* Talent Bridge Features Section */
+        .features12-section {
+            padding: 5rem 0;
+            background: url("https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80") center center/cover no-repeat fixed;
+            position: relative;
+            overflow: hidden;
+            color: var(--text-color);
+            transition: background-size 1s ease;
+        }
+
+        .features12-section.scrolled {
+            background-size: 110%;
+        }
+
+        .features12-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-green);
+            z-index: 0;
+            backdrop-filter: blur(1px);
+        }
+
+        .features12-section > .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        [data-animate] {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        [data-animate].visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mbr-section-title {
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .mbr-desc {
+            font-size: 1.2rem;
+            color: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .item-wrapper {
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.3s ease;
+            color: var(--text-color);
+        }
+
+        .item-wrapper:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 0.3rem 0.9rem;
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            color: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.25);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            color: rgba(0, 0, 0, 0.85);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card-text {
+            color: rgba(0, 0, 0, 0.75);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .talent-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(2px);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .talent-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            color: rgba(0, 0, 0, 0.8);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            position: relative;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .cta-section h2 {
+            margin-bottom: 28px;
+            font-size: 3rem;
+        }
+        
+        .cta-section p {
+            margin-bottom: 30px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .navbar-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 0;
+            }
+            
+            .navbar-center {
+                position: static;
+                transform: none;
+                flex-direction: column;
+                gap: 12px;
+                margin: 12px 0;
+            }
+            
+            .navbar-nav {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+            
+            .navbar-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .navbar {
+                height: auto;
+                padding: 12px 0;
+            }
+            
+            .hero {
+                padding: 140px 0 80px;
+                min-height: 80vh;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .how-it-works-content {
+                flex-direction: column;
+                padding: 30px;
+            }
+            
+            .how-it-works-text {
+                padding: 30px 0 0 0;
+            }
+            
+            .how-it-works-image img {
+                height: 300px;
+            }
+            
+            .how-it-works-buttons {
+                padding: 0 10px;
+            }
+            
+            .how-it-works-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .cta-section h2 {
+                font-size: 2.5rem;
+            }
+            
+            .cta-section p {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-card {
+                margin-bottom: 20px;
+            }
+            
+            .feature-content {
+                transform: translateY(100%);
+            }
+            
+            .close-btn {
+                display: block;
+            }
+            
+            .feature-img {
+                height: 250px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero {
+                padding: 120px 0 60px;
+                min-height: 70vh;
+            }
+            
+            .how-it-works-section {
+                padding: 80px 0;
+            }
+            
+            .how-it-works-content {
+                padding: 20px;
+            }
+            
+            .how-it-works-image img {
+                height: 250px;
+            }
+            
+            .how-it-works-title {
+                font-size: 1.5rem;
+            }
+            
+            .cta-section {
+                padding: 100px 0;
+            }
+            
+            .cta-section h2 {
+                font-size: 2.2rem;
+            }
+            
+            .cta-section p {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            
+            .feature-img {
+                height: 220px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+            
+            .cta-section p {
+                font-size: 1rem;
+            }
+        }
+        
+        .navbar-toggler {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-container">
+                    <div class="navbar-brand">
+                        <a class="navbar-caption" href="#">Idea Provider Platform</a>
+                    </div>
+                   
+                    <div class="navbar-buttons">
+                        <a class="btn btn-outline" href="index.html">Home</a>
+                        <a class="btn btn-outline" href="Post Idea.html">Post Idea</a>
+                        <a class="btn btn-outline" href="My Profile.html">My Profile</a>
+                        <a class="btn btn-outline" href="Ideas.html">Ideas</a>
+                        <a class="btn btn-outline" href="Messages.html">Messages</a>
+                        <a class="btn btn-outline" href="Settings.html">Settings</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">Your Ideas, Our Platform</h1>
+                <p class="fade-in delay-1">Got a brilliant concept? We're the stage for your genius to shine and connect with those who can make it real.</p>
+               
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Amplify Your Brilliance</h2>
+            <p class="section-subtitle text-center fade-in delay-1">Everything you need to turn your ideas into reality</p>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-img">
+                        <img src="D:\final csp\Main folder\311" alt="Profile Power-Up">
+                    </div>
+                    <div class="feature-content">
+                        <button class="close-btn">&times;</button>
+                        <h3>Profile Power-Up</h3>
+                        <ul>
+                            <li>Build your expert profile with our detailed builder</li>
+                            <li>Showcase portfolio with multiple media formats</li>
+                            <li>Track completeness with progress indicators</li>
+                            <li>Get discovered by relevant clients</li>
+                            <li>Build reputation through feedback & ratings</li>
+                        </ul>
+                        
+
+
+
+
+                    </div>
+                </div>
+                
+                <div class="feature-card fade-in delay-1">
+                    <div class="feature-img">
+                        <img src="D:\final csp\Main folder\16.jpeg" alt="Project Hub">
+                    </div>
+                    <div class="feature-content">
+                        <button class="close-btn">&times;</button>
+                        <h3>Project Hub</h3>
+                        <ul>
+                            <li>Launch projects with creation wizard</li>
+                            <li>Real-time notifications for interested parties</li>
+                            <li>Manage proposals with intuitive dashboard</li>
+                            <li>Set milestones with progress tracking</li>
+                            <li>Collaborate in dedicated project spaces</li>
+                        </ul>
+                        
+
+
+
+
+
+                    </div>
+                </div>
+                
+                <div class="feature-card fade-in delay-2">
+                    <div class="feature-img">
+                        <img src="D:\final csp\Main folder\17.jpeg" alt="Idea Vault">
+                    </div>
+                    <div class="feature-content">
+                        <button class="close-btn">&times;</button>
+                        <h3>Idea Vault</h3>
+                        <ul>
+                            <li>Submit concepts with idea form</li>
+                            <li>Add supporting media & links</li>
+                            <li>Community voting on concepts</li>
+                            <li>Expert feedback in your field</li>
+                            <li>Connect with collaborators</li>
+                        </ul>
+                        
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 1 -->
+    <section class="content-section">
+        <div class="container">
+            <div class="content-row">
+                <div class="content-text">
+                    <h2 class="section-title fade-in">Your Ideas, Amplified</h2>
+                    <p class="section-subtitle fade-in delay-1">We connect your genius with the resources it needs.</p>
+                    <p class="fade-in delay-2">This is where your wildest concepts meet their match. Submit your ideas with all the bells and whistles – images, documents, even prototype links. Let the world see what you're cooking up!</p>
+                </div>
+                <div class="content-image fade-in delay-3">
+                    <img src="D:\final csp\Main folder\314" alt="Ideas Amplified">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 2 -->
+    <section class="content-section">
+        <div class="container">
+            <div class="content-row">
+                <div class="content-text">
+                    <h2 class="section-title fade-in">Talk is Cheap, Work Isn't</h2>
+                    <p class="section-subtitle fade-in delay-1">Real-time chat keeps the momentum going. Message clients, hash out details, and get that project rolling. Feedback and ratings ensure everyone plays fair.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Slider Section -->
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">How It Works</h2>
+            <p class="section-subtitle text-center fade-in delay-1">A simple process to turn your ideas into reality</p>
+            
+            <div class="how-it-works-container">
+                <div class="how-it-works-track">
+                    <!-- Slide 1 -->
+                    <div class="how-it-works-slide">
+                        <div class="how-it-works-content">
+                            <div class="how-it-works-image">
+                                <img src="D:\final csp\Main folder\315" alt="Complete Your Profile">
+                            </div>
+                            <div class="how-it-works-text">
+                                <p class="how-it-works-desc">Profile</p>
+                                <h3 class="how-it-works-title">Complete Your Profile: Skills, Portfolio, Expertise</h3>
+                                <p class="how-it-works-content-text">Show the world what you're made of. Fill out your profile completely to attract the best opportunities. Highlight your skills, showcase your portfolio, and demonstrate your expertise to stand out from the crowd.</p>
+                                <a href="my profile.html" class="btn btn-primary">Complete Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="how-it-works-slide">
+                        <div class="how-it-works-content">
+                            <div class="how-it-works-image">
+                                <img src="D:\final csp\Main folder\316" alt="Post Your Projects">
+                            </div>
+                            <div class="how-it-works-text">
+                                <p class="how-it-works-desc">Projects</p>
+                                <h3 class="how-it-works-title">Post Your Projects: Title, Budget, Skills, Category</h3>
+                                <p class="how-it-works-content-text">Need something done? Post your project with all the details. We'll help you find the right talent. Define your requirements, set your budget, and specify the skills needed to bring your vision to life.</p>
+                                <a href="post idea.html" class="btn btn-primary">Post Project</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 3 -->
+                    <div class="how-it-works-slide">
+                        <div class="how-it-works-content">
+                            <div class="how-it-works-image">
+                                <img src="D:\final csp\Main folder\317" alt="Submit Proposals">
+                            </div>
+                            <div class="how-it-works-text">
+                                <p class="how-it-works-desc">Proposals</p>
+                                <h3 class="how-it-works-title">Submit Proposals: Quotations, Ideas, Documents</h3>
+                                <p class="how-it-works-content-text">Got a solution? Submit your proposal, complete with quotes, ideas, and supporting documents. Present your unique approach and demonstrate how you can deliver exceptional results for the project.</p>
+                                <a href="post idea.html" class="btn btn-primary">Submit Proposal</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <div class="how-it-works-buttons">
+                    <button class="how-it-works-btn prev-btn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="how-it-works-btn next-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Dots Navigation -->
+                <div class="how-it-works-nav">
+                    <div class="how-it-works-dot active"></div>
+                    <div class="how-it-works-dot"></div>
+                    <div class="how-it-works-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Header Section -->
+    <section class="header-section">
+        <div class="container-fluid">
+            <div class="header-row row">
+                <div class="title-wrapper">
+                    <h2 class="mbr-section-title">Idea Hub</h2>
+                </div>
+                
+                <div class="col-12 col-lg-6 header-card">
+                    <div class="image-wrapper">
+                        <img src="D:\final csp\Main folder\318" alt="Creative collaboration">
+                    </div>
+                </div>
+                
+                <div class="col-12 col-lg-6 header-card">
+                    <div class="image-wrap">
+                        <img src="D:\final csp\Main folder\319" alt="Team brainstorming">
+                    </div>
+                </div>
+                
+                <div class="col-12 col-lg-6 header-card">
+                    <div class="content-wrapper">
+                        <p class="mbr-desc">Where brilliant minds meet big budgets. Your next big thing starts here.</p>
+                        <p class="mbr-text">Transform your concepts into reality. Connect, create, and conquer.</p>
+                        <div class="mbr-section-btn">
+                            <a class="btn header-btn" href="My Profile.html">Join Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-lg-6 header-card">
+                    <div class="image-wrapper">
+                        <img src="D:\final csp\Main folder\320" alt="Innovation concept">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="ideas" class="products">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Featured Ideas</h2>
+            
+            <div class="products-grid">
+                <div class="product-card fade-in">
+                    <div class="product-img">
+                        <img src="D:\final csp\Main folder\321" alt="AI Assistant">
+                    </div>
+                    <div class="product-content">
+                        <p class="product-price">$500</p>
+                        <h3 class="product-title">AI Assistant</h3>
+                        <p class="product-desc">A smart assistant for daily tasks.</p>
+                        
+
+
+
+                    </div>
+                </div>
+                
+                <div class="product-card fade-in delay-1">
+                    <div class="product-img">
+                        <img src="D:\final csp\Main folder\322.avif" alt="Eco-Drone">
+                    </div>
+                    <div class="product-content">
+                        <p class="product-price">$1200</p>
+                        <h3 class="product-title">Eco-Drone</h3>
+                        <p class="product-desc">Sustainable aerial surveying.</p>
+                        
+
+
+
+                    </div>
+                </div>
+                
+                <div class="product-card fade-in delay-2">
+                    <div class="product-img">
+                        <img src="D:\final csp\Main folder\323" alt="VR Fitness">
+                    </div>
+                    <div class="product-content">
+                        <p class="product-price">$800</p>
+                        <h3 class="product-title">VR Fitness</h3>
+                        <p class="product-desc">Immersive workout experiences.</p>
+                       
+
+
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slider Section -->
+    <section id="testimonials" class="slider-section">
+        <div class="container">
+            <h2 class="section-title fade-in">More Than Just Ideas</h2>
+            
+            <div class="slider-container">
+                <div class="slider-track">
+                    <div class="slider-slide">
+                        <div class="slide-content">
+                            <div class="slide-image">
+                                <img src="D:\final csp\Main folder\324" alt="Submit">
+                            </div>
+                            <div class="slide-text">
+                                <h3 class="slide-title">Submit</h3>
+                                <p>Send your proposals and quotations directly to clients. Make your pitch count.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-slide">
+                        <div class="slide-content">
+                            <div class="slide-image">
+                                <img src="D:\final csp\Main folder\325" alt="Negotiate">
+                            </div>
+                            <div class="slide-text">
+                                <h3 class="slide-title">Negotiate</h3>
+                                <p>Manage proposal statuses and engage in negotiations. Seal the deal.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-slide">
+                        <div class="slide-content">
+                            <div class="slide-image">
+                                <img src="D:\final csp\Main folder\326" alt="Collaborate">
+                            </div>
+                            <div class="slide-text">
+                                <h3 class="slide-title">Collaborate</h3>
+                                <p>Use real-time chat to connect and start work. Seamless communication.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-nav">
+                    <div class="slider-dot active"></div>
+                    <div class="slider-dot"></div>
+                    <div class="slider-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Talent Bridge Features Section -->
+    <section class="features12-section" id="talent-bridge-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6" data-animate>
+                    <h2 class="mbr-section-title">A place that helps your ideas grow and succeed.</h2>
+                </div>
+                <div class="col-12 col-lg-6 text-lg-end" data-animate>
+                    <a href="#" class="talent-btn">Join Now</a>
+                </div>
+            </div>
+
+            <div class="col-12" data-animate>
+                <p class="mbr-desc">Start small, achieve big.</p>
+            </div>
+
+            <div class="row items-wrapper g-4">
+                <div class="col-12 col-lg-4" data-animate>
+                    <div class="item-wrapper">
+                        <p class="card-tag">Profile</p>
+                        <h4 class="card-title">Shine</h4>
+                        <p class="card-text">Craft a profile that screams 'hire me!' Show off your skills, your past triumphs, and your mad genius.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4" data-animate>
+                    <div class="item-wrapper">
+                        <p class="card-tag">Projects</p>
+                        <h4 class="card-title">Build</h4>
+                        <p class="card-text">Post your projects, set your terms, and watch the proposals roll in. We make managing your work a breeze.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4" data-animate>
+                    <div class="item-wrapper">
+                        <p class="card-tag">Proposals</p>
+                        <h4 class="card-title">Win</h4>
+                        <p class="card-text">Submit killer proposals, negotiate like a boss, and get paid for your amazing ideas. Your next big win is waiting.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="fade-in">Ready to Make Some Dough?</h2>
+                <p class="fade-in delay-1">Stop dreaming, start doing. Join our community of innovators and turn your brilliant ideas into reality. Sign up now!</p>
+                
+
+
+
+
+
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +91-90000-12345</li>
+                        <li><i class="fas fa-envelope"></i> team@talentbridge.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Bengaluru,India</li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Projects</a></li>
+                        <li><a href="#">Ideas</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+               
+
+ 
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Idea Provider Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Testimonial Slider
+        const track = document.querySelector('.slider-track');
+        const slides = Array.from(document.querySelectorAll('.slider-slide'));
+        const dots = Array.from(document.querySelectorAll('.slider-dot'));
+        
+        let currentSlide = 0;
+        
+        function updateSlider() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                updateSlider();
+            });
+        });
+        
+        // Auto-advance slider
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlider();
+        }, 5000);
+        
+        // How It Works Slider functionality
+        const howItWorksTrack = document.querySelector('.how-it-works-track');
+        const howItWorksSlides = Array.from(document.querySelectorAll('.how-it-works-slide'));
+        const howItWorksDots = Array.from(document.querySelectorAll('.how-it-works-dot'));
+        const howItWorksPrevBtn = document.querySelector('.how-it-works-buttons .prev-btn');
+        const howItWorksNextBtn = document.querySelector('.how-it-works-buttons .next-btn');
+        
+        let howItWorksCurrentSlide = 0;
+        let howItWorksSlideInterval;
+        
+        // Initialize how it works slider
+        function initHowItWorksSlider() {
+            updateHowItWorksSlider();
+            startHowItWorksAutoSlide();
+        }
+        
+        // Update how it works slider position
+        function updateHowItWorksSlider() {
+            howItWorksTrack.style.transform = `translateX(-${howItWorksCurrentSlide * 100}%)`;
+            
+            // Update active dot
+            howItWorksDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === howItWorksCurrentSlide);
+            });
+        }
+        
+        // Go to next slide
+        function howItWorksNextSlide() {
+            howItWorksCurrentSlide = (howItWorksCurrentSlide + 1) % howItWorksSlides.length;
+            updateHowItWorksSlider();
+        }
+        
+        // Go to previous slide
+        function howItWorksPrevSlide() {
+            howItWorksCurrentSlide = (howItWorksCurrentSlide - 1 + howItWorksSlides.length) % howItWorksSlides.length;
+            updateHowItWorksSlider();
+        }
+        
+        // Start auto sliding
+        function startHowItWorksAutoSlide() {
+            howItWorksSlideInterval = setInterval(howItWorksNextSlide, 5000);
+        }
+        
+        // Stop auto sliding
+        function stopHowItWorksAutoSlide() {
+            clearInterval(howItWorksSlideInterval);
+        }
+        
+        // Event listeners for how it works slider
+        howItWorksPrevBtn.addEventListener('click', () => {
+            howItWorksPrevSlide();
+            stopHowItWorksAutoSlide();
+            startHowItWorksAutoSlide();
+        });
+        
+        howItWorksNextBtn.addEventListener('click', () => {
+            howItWorksNextSlide();
+            stopHowItWorksAutoSlide();
+            startHowItWorksAutoSlide();
+        });
+        
+        // Dot navigation for how it works slider
+        howItWorksDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                howItWorksCurrentSlide = index;
+                updateHowItWorksSlider();
+                stopHowItWorksAutoSlide();
+                startHowItWorksAutoSlide();
+            });
+        });
+        
+        // Pause auto slide on hover for how it works slider
+        const howItWorksContainer = document.querySelector('.how-it-works-container');
+        howItWorksContainer.addEventListener('mouseenter', stopHowItWorksAutoSlide);
+        howItWorksContainer.addEventListener('mouseleave', startHowItWorksAutoSlide);
+        
+        // Initialize how it works slider on load
+        window.addEventListener('load', initHowItWorksSlider);
+        
+        // Fade-in animation on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = "1";
+                    element.style.transform = "translateY(0)";
+                }
+            });
+        };
+        
+        // Set initial state for fade elements
+        fadeElements.forEach(element => {
+            element.style.opacity = "0";
+            element.style.transform = "translateY(20px)";
+            element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        });
+        
+        window.addEventListener('scroll', fadeInOnScroll);
+        // Trigger once on load
+        window.addEventListener('load', fadeInOnScroll);
+        
+        // Feature card interactions
+        const featureCards = document.querySelectorAll('.feature-card');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        
+        // For mobile devices, use click instead of hover
+        if (window.innerWidth <= 768) {
+            featureCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking the close button
+                    if (e.target.classList.contains('close-btn')) return;
+                    
+                    // Close other cards
+                    featureCards.forEach(otherCard => {
+                        if (otherCard !== card) {
+                            otherCard.classList.remove('active');
+                        }
+                    });
+                    // Toggle current card
+                    card.classList.toggle('active');
+                });
+            });
+            
+            // Close cards when clicking close button
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.feature-card');
+                    card.classList.remove('active');
+                });
+            });
+            
+            // Close cards when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.feature-card')) {
+                    featureCards.forEach(card => {
+                        card.classList.remove('active');
+                    });
+                }
+            });
+        }
+
+        // Talent Bridge Features Animation
+        const talentSection = document.getElementById("talent-bridge-section");
+        const animatedElements = document.querySelectorAll("[data-animate]");
+
+        function handleScroll() {
+            const rect = talentSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                talentSection.classList.add("scrolled");
+            } else {
+                talentSection.classList.remove("scrolled");
+            }
+
+            animatedElements.forEach(el => {
+                const elRect = el.getBoundingClientRect();
+                if (elRect.top < window.innerHeight - 100) {
+                    el.classList.add("visible");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("load", handleScroll);
+    </script>
+</body>
+</html>

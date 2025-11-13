@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaHub | Ideas Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a0ca3;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light-blue: #e6f2ff;
+            --cream: #fef7e5;
+            --light-cream: #fefcf5;
+            --text-dark: #2b2d42;
+            --text-light: #6c757d;
+            --border: #e9ecef;
+            --success: #4cc9f0;
+            --warning: #ff9f1c;
+            --danger: #e71d36;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--cream) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            padding: 20px 0;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Search and Filter Section */
+        .search-filter {
+            background: var(--light-cream);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            background: var(--light-blue);
+            border-radius: 30px;
+            padding: 12px 20px;
+        }
+
+        .search-box i {
+            color: var(--text-light);
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--light-cream);
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Ideas Grid */
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .idea-card {
+            background: var(--light-cream);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+
+        .idea-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .idea-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .idea-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: #e6f7ff;
+            color: var(--primary);
+        }
+
+        .badge-popular {
+            background: #ffe6e6;
+            color: var(--danger);
+        }
+
+        .badge-trending {
+            background: #e6f9f0;
+            color: #2ec4b6;
+        }
+
+        .idea-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .idea-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .idea-provider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .provider-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .provider-details {
+            flex: 1;
+        }
+
+        .provider-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .provider-email {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .idea-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .idea-body {
+            padding: 20px;
+        }
+
+        .idea-description {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .idea-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: var(--light-blue);
+            color: var(--text-light);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .tag.ai {
+            background: #e6f7ff;
+            color: var(--primary);
+        }
+
+        .tag.eco {
+            background: #e6f9f0;
+            color: #2ec4b6;
+        }
+
+        .tag.health {
+            background: #ffe6e6;
+            color: var(--danger);
+        }
+
+        .tag.blockchain {
+            background: #f0e6ff;
+            color: var(--secondary);
+        }
+
+        .tag.education {
+            background: #fff0e6;
+            color: var(--warning);
+        }
+
+        .tag.fintech {
+            background: #e6f9f0;
+            color: #2ec4b6;
+        }
+
+        .tag.iot {
+            background: #e6f7ff;
+            color: var(--primary);
+        }
+
+        .idea-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .idea-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3ab0d6;
+        }
+
+        .btn-comments {
+            background: #ff9f1c;
+            color: white;
+        }
+
+        .btn-comments:hover {
+            background: #e08a0a;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            display: none;
+        }
+
+        .comments-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comment-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .comment-text {
+            color: var(--text-light);
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+
+        .comment-meta {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .post-comment-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .idea-full-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .message-modal textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .ideas-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .idea-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    
+                    <h1>Talent Bridge</h1>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#" class="active"><i class="fas fa-compass"></i>Ideas</a>
+                    <a href="hire talent.html"><i class="fas fa-star"></i> Home</a>
+                    
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">CL</div>
+                    <div>
+                        <div class="user-name">Client Account</div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Search and Filter Section -->
+        <div class="search-filter">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search for innovative ideas...">
+            </div>
+            
+            <div class="filter-options">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="ai">AI & Machine Learning</option>
+                    <option value="sustainability">Sustainability</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="blockchain">Blockchain</option>
+                    <option value="education">Education</option>
+                    <option value="fintech">FinTech</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Ideas Grid -->
+        <div class="section-title">
+            <h2>Featured Ideas</h2>
+            <a href="#" class="view-all">View All Ideas <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="ideas-grid" id="ideasGrid">
+            <!-- Idea 1 -->
+            <div class="idea-card" data-category="ai healthcare">
+                <div class="idea-image" style="background-image: url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                    <div class="idea-badge badge-trending">Trending</div>
+                </div>
+                <div class="idea-header">
+                    <div class="idea-title">AI-Powered Healthcare Diagnostics</div>
+                    <div class="idea-provider">
+                        <div class="provider-avatar" style="background-color: #4cc9f0;">SJ</div>
+                        <div class="provider-details">
+                            <div class="provider-name">Dr. Sarah Johnson</div>
+                            <div class="provider-email">sarah.johnson@techcorp.com</div>
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span><i class="fas fa-calendar"></i> Posted: 2 days ago</span>
+                        <span><i class="fas fa-clock"></i> 6 min read</span>
+                    </div>
+                </div>
+                <div class="idea-body">
+                    <div class="idea-description">
+                        Revolutionary AI system for early disease detection using advanced machine learning algorithms and medical imaging analysis.
+                    </div>
+                    <div class="idea-tags">
+                        <div class="tag ai">AI/ML</div>
+                        <div class="tag health">Healthcare</div>
+                        <div class="tag">Medical Tech</div>
+                    </div>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <i class="fas fa-eye"></i> 1.2K views
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-heart"></i> 342 likes
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-comment"></i> 87 comments
+                        </div>
+                        
+
+
+
+
+
+
+
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn btn-success message-btn" data-provider="Dr. Sarah Johnson" data-idea="AI-Powered Healthcare Diagnostics"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="btn btn-comments comments-btn"><i class="fas fa-comments"></i> Comments</button>
+                        <button class="btn btn-outline details-btn" data-idea="1"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                    <div class="comments-section">
+                        <h4 class="comments-title">Comments (3)</h4>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #4361ee;">JD</div>
+                            <div class="comment-content">
+                                <div class="comment-author">John Doe</div>
+                                <div class="comment-text">This is a fantastic idea! How accurate is the AI in detecting early-stage diseases?</div>
+                                <div class="comment-meta">
+                                    <span>2 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 12</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #7209b7;">MS</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Maria Smith</div>
+                                <div class="comment-text">As a healthcare professional, I can see the potential impact of this technology. Would love to learn more about implementation.</div>
+                                <div class="comment-meta">
+                                    <span>1 day ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #f72585;">AR</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Alex Rodriguez</div>
+                                <div class="comment-text">Great concept! What kind of medical imaging does this system work with? MRI, CT, X-ray?</div>
+                                <div class="comment-meta">
+                                    <span>5 hours ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button class="post-comment-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Idea 2 -->
+            <div class="idea-card" data-category="sustainability">
+                <div class="idea-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                    <div class="idea-badge badge-new">New</div>
+                </div>
+                <div class="idea-header">
+                    <div class="idea-title">Sustainable Packaging from Agricultural Waste</div>
+                    <div class="idea-provider">
+                        <div class="provider-avatar" style="background-color: #2ec4b6;">MC</div>
+                        <div class="provider-details">
+                            <div class="provider-name">Michael Chen</div>
+                            <div class="provider-email">michael.chen@ecosolutions.com</div>
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span><i class="fas fa-calendar"></i> Posted: 1 week ago</span>
+                        <span><i class="fas fa-clock"></i> 4 min read</span>
+                    </div>
+                </div>
+                <div class="idea-body">
+                    <div class="idea-description">
+                        Biodegradable packaging materials created from agricultural waste, reducing plastic pollution and supporting circular economy.
+                    </div>
+                    <div class="idea-tags">
+                        <div class="tag eco">Sustainability</div>
+                        <div class="tag">Material Science</div>
+                        <div class="tag">E-commerce</div>
+                    </div>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <i class="fas fa-eye"></i> 894 views
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-heart"></i> 215 likes
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-comment"></i> 43 comments
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn btn-success message-btn" data-provider="Michael Chen" data-idea="Sustainable Packaging from Agricultural Waste"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="btn btn-comments comments-btn"><i class="fas fa-comments"></i> Comments</button>
+                        <button class="btn btn-outline details-btn" data-idea="2"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                    <div class="comments-section">
+                        <h4 class="comments-title">Comments (2)</h4>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #2ec4b6;">EG</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Eco Guru</div>
+                                <div class="comment-text">This is exactly what we need to combat plastic pollution! How long does the packaging take to decompose?</div>
+                                <div class="comment-meta">
+                                    <span>5 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 15</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #ff9f1c;">PM</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Packaging Manager</div>
+                                <div class="comment-text">Interesting concept. What's the cost comparison with traditional plastic packaging?</div>
+                                <div class="comment-meta">
+                                    <span>3 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 7</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button class="post-comment-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Idea 3 -->
+            <div class="idea-card" data-category="blockchain">
+                <div class="idea-image" style="background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                    <div class="idea-badge badge-popular">Popular</div>
+                </div>
+                <div class="idea-header">
+                    <div class="idea-title">Blockchain Supply Chain for Agriculture</div>
+                    <div class="idea-provider">
+                        <div class="provider-avatar" style="background-color: #7209b7;">DR</div>
+                        <div class="provider-details">
+                            <div class="provider-name">David Rodriguez</div>
+                            <div class="provider-email">david.rodriguez@startupgalaxy.com</div>
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span><i class="fas fa-calendar"></i> Posted: 3 days ago</span>
+                        <span><i class="fas fa-clock"></i> 5 min read</span>
+                    </div>
+                </div>
+                <div class="idea-body">
+                    <div class="idea-description">
+                        Transparent supply chain solution using blockchain to track agricultural products from farm to consumer, ensuring quality and authenticity.
+                    </div>
+                    <div class="idea-tags">
+                        <div class="tag blockchain">Blockchain</div>
+                        <div class="tag">Supply Chain</div>
+                        <div class="tag">Agriculture</div>
+                    </div>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <i class="fas fa-eye"></i> 1.5K views
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-heart"></i> 421 likes
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-comment"></i> 112 comments
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn btn-success message-btn" data-provider="David Rodriguez" data-idea="Blockchain Supply Chain for Agriculture"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="btn btn-comments comments-btn"><i class="fas fa-comments"></i> Comments</button>
+                        <button class="btn btn-outline details-btn" data-idea="3"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                    <div class="comments-section">
+                        <h4 class="comments-title">Comments (5)</h4>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #7209b7;">BC</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Blockchain Enthusiast</div>
+                                <div class="comment-text">Finally, a practical use case for blockchain beyond cryptocurrency! How does this handle scalability with large agricultural operations?</div>
+                                <div class="comment-meta">
+                                    <span>2 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 22</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #3a0ca3;">FA</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Farm Owner</div>
+                                <div class="comment-text">This could revolutionize how we track our produce. What's the implementation process like for small farms?</div>
+                                <div class="comment-meta">
+                                    <span>1 day ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 14</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button class="post-comment-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Idea 4 -->
+            <div class="idea-card" data-category="education ai">
+                <div class="idea-image" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                    <div class="idea-badge badge-new">New</div>
+                </div>
+                <div class="idea-header">
+                    <div class="idea-title">Personalized Learning Platform with AI</div>
+                    <div class="idea-provider">
+                        <div class="provider-avatar" style="background-color: #4895ef;">EW</div>
+                        <div class="provider-details">
+                            <div class="provider-name">Dr. Emily Watson</div>
+                            <div class="provider-email">emily.watson@learntech.com</div>
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span><i class="fas fa-calendar"></i> Posted: 5 days ago</span>
+                        <span><i class="fas fa-clock"></i> 7 min read</span>
+                    </div>
+                </div>
+                <div class="idea-body">
+                    <div class="idea-description">
+                        AI-powered learning platform that creates personalized educational paths based on individual learning styles and progress tracking.
+                    </div>
+                    <div class="idea-tags">
+                        <div class="tag education">EdTech</div>
+                        <div class="tag ai">AI</div>
+                        <div class="tag">E-Learning</div>
+                    </div>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <i class="fas fa-eye"></i> 756 views
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-heart"></i> 198 likes
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-comment"></i> 54 comments
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn btn-success message-btn" data-provider="Dr. Emily Watson" data-idea="Personalized Learning Platform with AI"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="btn btn-comments comments-btn"><i class="fas fa-comments"></i> Comments</button>
+                        <button class="btn btn-outline details-btn" data-idea="4"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                    <div class="comments-section">
+                        <h4 class="comments-title">Comments (4)</h4>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #4895ef;">TE</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Teacher Educator</div>
+                                <div class="comment-text">This could be a game-changer for differentiated instruction. How does the AI identify different learning styles?</div>
+                                <div class="comment-meta">
+                                    <span>4 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 18</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #f72585;">SP</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Student Parent</div>
+                                <div class="comment-text">My child struggles with traditional learning methods. Would this platform be suitable for children with learning differences?</div>
+                                <div class="comment-meta">
+                                    <span>2 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 9</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button class="post-comment-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Idea 5 -->
+            <div class="idea-card" data-category="fintech">
+                <div class="idea-image" style="background-image: url('https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                    <div class="idea-badge badge-trending">Trending</div>
+                </div>
+                <div class="idea-header">
+                    <div class="idea-title">Secure Mobile Banking with Biometrics</div>
+                    <div class="idea-provider">
+                        <div class="provider-avatar" style="background-color: #3a0ca3;">RK</div>
+                        <div class="provider-details">
+                            <div class="provider-name">Robert Kim</div>
+                            <div class="provider-email">robert.kim@banktech.com</div>
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span><i class="fas fa-calendar"></i> Posted: 2 weeks ago</span>
+                        <span><i class="fas fa-clock"></i> 8 min read</span>
+                    </div>
+                </div>
+                <div class="idea-body">
+                    <div class="idea-description">
+                        Next-generation mobile banking application with advanced biometric security, real-time fraud detection, and seamless user experience.
+                    </div>
+                    <div class="idea-tags">
+                        <div class="tag fintech">FinTech</div>
+                        <div class="tag">Mobile App</div>
+                        <div class="tag">Banking</div>
+                    </div>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <i class="fas fa-eye"></i> 2.1K views
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-heart"></i> 567 likes
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-comment"></i> 134 comments
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn btn-success message-btn" data-provider="Robert Kim" data-idea="Secure Mobile Banking with Biometrics"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="btn btn-comments comments-btn"><i class="fas fa-comments"></i> Comments</button>
+                        <button class="btn btn-outline details-btn" data-idea="5"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                    <div class="comments-section">
+                        <h4 class="comments-title">Comments (6)</h4>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #3a0ca3;">FS</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Financial Security Expert</div>
+                                <div class="comment-text">Biometric authentication is the future of banking security. What fallback mechanisms are in place if biometrics fail?</div>
+                                <div class="comment-meta">
+                                    <span>1 week ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 32</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #4361ee;">CU</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Concerned User</div>
+                                <div class="comment-text">I'm worried about privacy with biometric data. How is this information stored and protected?</div>
+                                <div class="comment-meta">
+                                    <span>5 days ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 24</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button class="post-comment-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Idea 6 -->
+            <div class="idea-card" data-category="iot ai sustainability">
+                <div class="idea-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                    <div class="idea-badge badge-popular">Popular</div>
+                </div>
+                <div class="idea-header">
+                    <div class="idea-title">Smart Home Energy Optimization System</div>
+                    <div class="idea-provider">
+                        <div class="provider-avatar" style="background-color: #ff9f1c;">LT</div>
+                        <div class="provider-details">
+                            <div class="provider-name">Lisa Thompson</div>
+                            <div class="provider-email">lisa.thompson@smarthomeinc.com</div>
+                        </div>
+                    </div>
+                    <div class="idea-meta">
+                        <span><i class="fas fa-calendar"></i> Posted: 1 month ago</span>
+                        <span><i class="fas fa-clock"></i> 6 min read</span>
+                    </div>
+                </div>
+                <div class="idea-body">
+                    <div class="idea-description">
+                        IoT-based system that optimizes home energy consumption using AI algorithms, reducing costs and environmental impact.
+                    </div>
+                    <div class="idea-tags">
+                        <div class="tag iot">IoT</div>
+                        <div class="tag ai">AI</div>
+                        <div class="tag eco">Sustainability</div>
+                    </div>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <i class="fas fa-eye"></i> 3.2K views
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-heart"></i> 892 likes
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-comment"></i> 245 comments
+                        </div>
+                    </div>
+                    <div class="idea-actions">
+                        <button class="btn btn-success message-btn" data-provider="Lisa Thompson" data-idea="Smart Home Energy Optimization System"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="btn btn-comments comments-btn"><i class="fas fa-comments"></i> Comments</button>
+                        <button class="btn btn-outline details-btn" data-idea="6"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                    <div class="comments-section">
+                        <h4 class="comments-title">Comments (8)</h4>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #ff9f1c;">HS</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Homeowner</div>
+                                <div class="comment-text">This could save me a lot on my energy bills! How difficult is the installation process?</div>
+                                <div class="comment-meta">
+                                    <span>3 weeks ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 45</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar" style="background-color: #2ec4b6;">EE</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Energy Engineer</div>
+                                <div class="comment-text">The AI optimization aspect is impressive. What data points does the system use to make decisions?</div>
+                                <div class="comment-meta">
+                                    <span>2 weeks ago</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 28</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button class="post-comment-btn">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Idea Details Modal -->
+    <div class="modal" id="ideaDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="ideaDetailsTitle">Idea Details</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="ideaDetailsContent">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-modal">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Message Modal -->
+    <div class="modal message-modal" id="messageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="messageModalTitle">Send Message</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="messageRecipient">To: Idea Provider</p>
+                <textarea id="messageText" placeholder="Type your message here..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-modal">Cancel</button>
+                <button class="btn btn-success" id="sendMessageBtn">Send Message</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 IdeaHub Marketplace. All rights reserved.</p>
+            <p>Connecting innovative ideas with forward-thinking clients worldwide</p>
+        </div>
+    </footer>
+
+    <script>
+        // Idea details data
+        const ideaDetails = {
+            1: {
+                title: "AI-Powered Healthcare Diagnostics",
+                provider: "Dr. Sarah Johnson • TechCorp Inc.",
+                email: "sarah.johnson@techcorp.com",
+                description: "Revolutionary AI system for early disease detection using advanced machine learning algorithms and medical imaging analysis. This system can analyze medical images with 98% accuracy, significantly reducing diagnostic errors and improving patient outcomes. The platform integrates seamlessly with existing healthcare systems and provides real-time insights to medical professionals.",
+                fullDescription: "Our AI-powered diagnostic system represents a breakthrough in medical technology. By leveraging deep learning algorithms trained on millions of medical images, the system can detect early signs of diseases such as cancer, cardiovascular conditions, and neurological disorders with unprecedented accuracy. The platform includes features for automated report generation, risk assessment scoring, and integration with electronic health records. Implementation typically takes 3-6 months depending on the healthcare facility's existing infrastructure.",
+                implementationTime: "3-6 months",
+                investmentRange: "$50,000 - $200,000",
+                targetMarket: "Hospitals, Diagnostic Centers, Telemedicine Platforms"
+            },
+            2: {
+                title: "Sustainable Packaging from Agricultural Waste",
+                provider: "Michael Chen • EcoSolutions",
+                email: "michael.chen@ecosolutions.com",
+                description: "Biodegradable packaging materials created from agricultural waste, reducing plastic pollution and supporting circular economy.",
+                fullDescription: "Our sustainable packaging solution transforms agricultural waste such as rice husks, wheat straw, and corn stalks into durable, biodegradable packaging materials. This process not only reduces plastic pollution but also creates additional revenue streams for farmers. The materials are fully compostable within 90 days and have similar protective properties to conventional plastics. The manufacturing process is energy-efficient and produces minimal carbon emissions.",
+                implementationTime: "6-12 months",
+                investmentRange: "$100,000 - $500,000",
+                targetMarket: "E-commerce, Food & Beverage, Consumer Goods"
+            },
+            3: {
+                title: "Blockchain Supply Chain for Agriculture",
+                provider: "David Rodriguez • Startup Galaxy",
+                email: "david.rodriguez@startupgalaxy.com",
+                description: "Transparent supply chain solution using blockchain to track agricultural products from farm to consumer, ensuring quality and authenticity.",
+                fullDescription: "Our blockchain-based supply chain platform creates an immutable record of agricultural products from farm to table. Each product is assigned a unique digital identity that tracks its journey through the supply chain, including information about farming practices, transportation conditions, and storage facilities. This transparency helps prevent fraud, ensures food safety, and allows consumers to make informed purchasing decisions. The system integrates with IoT sensors for real-time monitoring of temperature, humidity, and other critical factors.",
+                implementationTime: "4-8 months",
+                investmentRange: "$75,000 - $300,000",
+                targetMarket: "Agricultural Producers, Food Distributors, Retailers"
+            },
+            4: {
+                title: "Personalized Learning Platform with AI",
+                provider: "Dr. Emily Watson • LearnTech",
+                email: "emily.watson@learntech.com",
+                description: "AI-powered learning platform that creates personalized educational paths based on individual learning styles and progress tracking.",
+                fullDescription: "Our AI-driven learning platform adapts to each student's unique learning style, pace, and knowledge gaps. The system uses machine learning algorithms to analyze student performance and continuously refine the learning path. Features include interactive content, gamified learning experiences, real-time feedback, and comprehensive progress analytics. The platform supports multiple subjects and educational levels, making it suitable for K-12 education, higher education, and corporate training.",
+                implementationTime: "5-10 months",
+                investmentRange: "$150,000 - $600,000",
+                targetMarket: "Educational Institutions, EdTech Companies, Corporate Training"
+            },
+            5: {
+                title: "Secure Mobile Banking with Biometrics",
+                provider: "Robert Kim • BankTech",
+                email: "robert.kim@banktech.com",
+                description: "Next-generation mobile banking application with advanced biometric security, real-time fraud detection, and seamless user experience.",
+                fullDescription: "Our secure mobile banking platform combines advanced biometric authentication (including facial recognition, fingerprint scanning, and voice recognition) with AI-powered fraud detection systems. The platform offers a seamless user experience while maintaining the highest security standards. Additional features include real-time transaction monitoring, personalized financial insights, and integration with various payment systems. The solution is compliant with major financial regulations and can be customized for different banking institutions.",
+                implementationTime: "6-9 months",
+                investmentRange: "$200,000 - $800,000",
+                targetMarket: "Banks, Credit Unions, Financial Institutions"
+            },
+            6: {
+                title: "Smart Home Energy Optimization System",
+                provider: "Lisa Thompson • SmartHome Inc.",
+                email: "lisa.thompson@smarthomeinc.com",
+                description: "IoT-based system that optimizes home energy consumption using AI algorithms, reducing costs and environmental impact.",
+                fullDescription: "Our smart home energy optimization system uses a network of IoT sensors and AI algorithms to monitor and control energy usage throughout a home. The system learns household patterns and automatically adjusts heating, cooling, lighting, and appliance usage to minimize energy waste while maintaining comfort. Users can monitor their energy consumption through a mobile app and receive personalized recommendations for further savings. The system typically reduces energy bills by 20-30% and can integrate with renewable energy sources like solar panels.",
+                implementationTime: "2-4 months",
+                investmentRange: "$50,000 - $150,000",
+                targetMarket: "Homeowners, Property Developers, Utility Companies"
+            }
+        };
+
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get modal elements
+            const ideaDetailsModal = document.getElementById('ideaDetailsModal');
+            const messageModal = document.getElementById('messageModal');
+            const closeModalButtons = document.querySelectorAll('.close-modal');
+            const detailsButtons = document.querySelectorAll('.details-btn');
+            const messageButtons = document.querySelectorAll('.message-btn');
+            const commentsButtons = document.querySelectorAll('.comments-btn');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const searchInput = document.getElementById('searchInput');
+            const ideaCards = document.querySelectorAll('.idea-card');
+            
+            // Open idea details modal
+            detailsButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const ideaId = this.getAttribute('data-idea');
+                    const idea = ideaDetails[ideaId];
+                    
+                    if (idea) {
+                        document.getElementById('ideaDetailsTitle').textContent = idea.title;
+                        document.getElementById('ideaDetailsContent').innerHTML = `
+                            <div class="idea-full-description">
+                                <h4>Full Description</h4>
+                                <p>${idea.fullDescription}</p>
+                            </div>
+                            <div class="idea-meta-details">
+                                <h4>Implementation Details</h4>
+                                <p><strong>Estimated Implementation Time:</strong> ${idea.implementationTime}</p>
+                                <p><strong>Investment Range:</strong> ${idea.investmentRange}</p>
+                                <p><strong>Target Market:</strong> ${idea.targetMarket}</p>
+                            </div>
+                            <div class="idea-provider-info">
+                                <h4>About the Provider</h4>
+                                <p><strong>Name:</strong> ${idea.provider}</p>
+                                <p><strong>Email:</strong> ${idea.email}</p>
+                            </div>
+                        `;
+                        
+                        ideaDetailsModal.style.display = 'flex';
+                    }
+                });
+            });
+            
+            // Open message modal
+            messageButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const provider = this.getAttribute('data-provider');
+                    const idea = this.getAttribute('data-idea');
+                    
+                    document.getElementById('messageModalTitle').textContent = `Message about: ${idea}`;
+                    document.getElementById('messageRecipient').textContent = `To: ${provider}`;
+                    document.getElementById('messageText').value = '';
+                    
+                    // Store provider and idea in the send button for later use
+                    sendMessageBtn.setAttribute('data-provider', provider);
+                    sendMessageBtn.setAttribute('data-idea', idea);
+                    
+                    messageModal.style.display = 'flex';
+                });
+            });
+            
+            // Toggle comments section
+            commentsButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentsSection = this.closest('.idea-body').querySelector('.comments-section');
+                    const isVisible = commentsSection.style.display === 'block';
+                    
+                    // Hide all comments sections first
+                    document.querySelectorAll('.comments-section').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Toggle the clicked comments section
+                    commentsSection.style.display = isVisible ? 'none' : 'block';
+                });
+            });
+            
+            // Close modals
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    ideaDetailsModal.style.display = 'none';
+                    messageModal.style.display = 'none';
+                });
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === ideaDetailsModal) {
+                    ideaDetailsModal.style.display = 'none';
+                }
+                if (event.target === messageModal) {
+                    messageModal.style.display = 'none';
+                }
+            });
+            
+            // Send message functionality
+            sendMessageBtn.addEventListener('click', function() {
+                const provider = this.getAttribute('data-provider');
+                const idea = this.getAttribute('data-idea');
+                const message = document.getElementById('messageText').value.trim();
+                
+                if (message) {
+                    // In a real application, this would send the message to the provider
+                    alert(`Your message about "${idea}" has been sent to ${provider}!`);
+                    messageModal.style.display = 'none';
+                } else {
+                    alert('Please enter a message before sending.');
+                }
+            });
+            
+            // Category filter functionality
+            categoryFilter.addEventListener('change', function() {
+                const selectedCategory = this.value;
+                
+                ideaCards.forEach(card => {
+                    if (selectedCategory === 'all' || card.getAttribute('data-category').includes(selectedCategory)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                ideaCards.forEach(card => {
+                    const title = card.querySelector('.idea-title').textContent.toLowerCase();
+                    const description = card.querySelector('.idea-description').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
